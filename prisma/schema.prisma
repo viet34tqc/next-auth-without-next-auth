@@ -8,3 +8,22 @@ datasource db {
   provider = "sqlite"
   url      = env("DATABASE_URL")
 }
+
+model User {
+  id           String    @id @default(cuid())
+  sessions     Session[]
+  firstName    String
+  lastName     String
+  email        String    @unique
+  passwordHash String
+}
+
+// When a user signs up or signs in, we create a session for them.
+// This session is stored in a database and a cookie with a session token is set in the user's browser
+// Whenever the user sends a request to the server, we validate the session and if everything is fine, we return the session and the user.
+model Session {
+  id        String   @id
+  expiresAt DateTime
+  userId    String
+  user      User     @relation(references: [id], fields: [userId], onDelete: Cascade)
+}
