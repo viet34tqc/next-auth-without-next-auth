@@ -1,6 +1,6 @@
 import { hash, verify } from '@node-rs/argon2';
 
-export const hassPassword = async (password: string) => {
+export const hashPassword = async (password: string) => {
   return await hash(password);
 };
 
