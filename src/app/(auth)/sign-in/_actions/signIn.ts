@@ -4,17 +4,27 @@ import { setSessionCookie } from '@/lib/auth/cookie';
 import { verifyHashPassword } from '@/lib/auth/password';
 import { createSession, generateRandomSessionToken } from '@/lib/auth/session';
 import { prisma } from '@/lib/prisma';
-import { isRedirectError } from 'next/dist/client/components/redirect-error';
-import { redirect } from 'next/navigation';
+import {
+  FormState,
+  fromErrorfromMessageToFormState,
+  fromMessageToFormState,
+} from '@/lib/utils';
+import { z } from 'zod';
 
-export const signIn = async (formData: FormData) => {
-  const formDataRaw = Object.fromEntries(formData.entries());
+const signInSchema = z.object({
+  email: z.string().min(1),
+  password: z.string().min(1),
+});
 
+export const signIn = async (formState: FormState, formData: FormData) => {
   try {
+    const formDataRaw = Object.fromEntries(formData.entries());
+    const data = signInSchema.parse(formDataRaw);
+
     // Validate user
     const user = await prisma.user.findUnique({
       where: {
-        email: formDataRaw.email as string,
+        email: data.email as string,
       },
     });
     if (!user) {
@@ -25,7 +35,7 @@ export const signIn = async (formData: FormData) => {
     // Validate password
     const validPassword = await verifyHashPassword(
       user.passwordHash,
-      formDataRaw.password as string
+      data.password as string
     );
 
     if (!validPassword) {
@@ -37,12 +47,8 @@ export const signIn = async (formData: FormData) => {
     const session = await createSession(sessionToken, user.id);
 
     await setSessionCookie(sessionToken, session.expiresAt);
-
-    redirect('/dashboard');
+    return fromMessageToFormState('SUCCESS', 'Signed in successfully');
   } catch (error) {
-    if (isRedirectError(error)) {
-      redirect('/dashboard');
-    }
-    console.log('error', error);
+    return fromErrorfromMessageToFormState(error);
   }
 };
