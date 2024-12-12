@@ -1,7 +1,9 @@
 import SignOutButton from '@/app/(auth)/sign-out/sign-out-button';
+import { getAuth } from '@/lib/auth/cookie';
 import Link from 'next/link';
 
-const Header = () => {
+const Header = async () => {
+  const { user } = await getAuth();
   const appNav = (
     <>
       <li>
@@ -9,6 +11,9 @@ const Header = () => {
       </li>
       <li>
         <Link href="/dashboard">Dashboard</Link>
+      </li>
+      <li>
+        <SignOutButton />
       </li>
     </>
   );
@@ -20,16 +25,12 @@ const Header = () => {
       <li>
         <Link href="/sign-in">Sign In</Link>
       </li>
-      <li>
-        <SignOutButton />
-      </li>
     </>
   );
 
   return (
     <header>
-      <ul>{appNav}</ul>
-      <ul>{authNav}</ul>
+      <ul>{user ? appNav : authNav}</ul>
     </header>
   );
 };

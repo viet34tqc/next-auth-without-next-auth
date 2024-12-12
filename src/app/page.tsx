@@ -1,6 +1,6 @@
 // src/app/page.tsx
 const PublicHomePage = () => {
-  return <h2>Home Page (Public)</h2>;
+  return <p>Welcome to the demo of authentication without next auth</p>;
 };
 
 export default PublicHomePage;
