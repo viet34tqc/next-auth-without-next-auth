@@ -7,11 +7,11 @@ import { redirect } from 'next/navigation';
 export const signOut = async () => {
   const { session } = await getAuth();
   if (!session) {
-    redirect('/sign-in');
+    redirect('/login');
   }
 
   await invalidateSession(session.id);
   await deleteSessionCookie();
 
-  redirect('/sign-in');
+  redirect('/login');
 };

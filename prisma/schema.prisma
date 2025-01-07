@@ -11,6 +11,7 @@ datasource db {
 
 model User {
   id           String    @id @default(cuid())
+  githubId     Int?
   sessions     Session[]
   firstName    String
   lastName     String

@@ -23,7 +23,7 @@ const Header = async () => {
         <Link href="/sign-up">Sign Up</Link>
       </li>
       <li>
-        <Link href="/sign-in">Sign In</Link>
+        <Link href="/login">Sign In</Link>
       </li>
     </>
   );

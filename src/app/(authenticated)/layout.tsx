@@ -9,7 +9,7 @@ const AuthenticatedLayout = async ({
   const { user } = await getAuth();
 
   if (!user) {
-    redirect('/sign-in');
+    redirect('/login');
   }
 
   return <>{children}</>;
