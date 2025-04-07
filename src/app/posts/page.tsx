@@ -19,7 +19,7 @@ const PostsPage = () => {
     <div className='space-y-4'>
       <h1 className='tracking-tight'>Posts</h1>
 
-      <ul className='space-y-3 animate-fade-down'>
+      <ul className='space-y-3 animate-in fade-in-10 slide-in-from-top-10 duration-600'>
         {posts.map((post) => (
           <li key={post.id} className='border border-slate-200 rounded-md p-4'>
             <h3 className='text-lg'>{post.title}</h3>
