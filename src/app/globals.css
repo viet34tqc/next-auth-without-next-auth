@@ -8,6 +8,21 @@
   }
 }
 
+@layer base {
+  :where(h1, h2, h3, h4) {
+    font-weight: var(--font-weight-bold);
+  }
+  h1 {
+    font-size: var(--text-3xl);
+  }
+  h2 {
+    font-size: var(--text-2xl);
+  }
+  h3 {
+    font-size: var(--text-xl);
+  }
+}
+
 @media (prefers-color-scheme: dark) {
   body {
     background-color: theme('colors.gray.900');

@@ -17,7 +17,7 @@ const posts = [
 const PostsPage = () => {
   return (
     <div className='space-y-4'>
-      <h1 className='text-3xl font-bold tracking-tight'>Posts</h1>
+      <h1 className='tracking-tight'>Posts</h1>
 
       <ul className='space-y-3 animate-fade-down'>
         {posts.map((post) => (
