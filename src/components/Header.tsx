@@ -1,12 +1,15 @@
 import SignOutButton from '@/app/(auth)/sign-out/sign-out-button'
 import { getAuth } from '@/lib/auth/cookie'
+import { Newspaper } from 'lucide-react'
 import Link from 'next/link'
 
 const Header = async () => {
   const { user } = await getAuth()
   const appNav = (
     <>
-      <Link href='/'>Home</Link>
+      <Link href='/' className='flex items-center gap-2'>
+        <Newspaper size='14' /> NewsPaper
+      </Link>
       <Link href='/dashboard'>Dashboard</Link>
       <SignOutButton />
     </>

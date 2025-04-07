@@ -3,11 +3,9 @@
 
 @custom-variant dark (&:is(.dark *));
 
-@layer utilities {
-  .container {
-    padding-inline: 1rem;
-    margin: auto;
-  }
+@utility container {
+  padding-inline: 1rem;
+  margin: auto;
 }
 
 :root {
@@ -124,7 +122,10 @@
   body {
     @apply bg-background text-foreground;
   }
-  h1, h2, h3, h4 {
+  h1,
+  h2,
+  h3,
+  h4 {
     font-weight: var(--font-weight-bold);
   }
   h1 {
