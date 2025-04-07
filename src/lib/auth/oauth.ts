@@ -1,20 +1,20 @@
-import { GitHub } from 'arctic';
-import { prisma } from '../prisma';
+import { GitHub } from 'arctic'
+import { prisma } from '../prisma'
 
 export const github = new GitHub(
   process.env.GITHUB_CLIENT_ID ?? '',
   process.env.GITHUB_CLIENT_SECRET ?? '',
-  'http://localhost:3000/login/github/callback'
-);
+  'http://localhost:3000/login/github/callback',
+)
 
 export const getUserFromGitHubId = async (githubId: number) => {
   const row = await prisma.user.findFirst({
     where: {
       githubId,
     },
-  });
+  })
   if (row === null) {
-    return null;
+    return null
   }
 
   return {
@@ -23,5 +23,5 @@ export const getUserFromGitHubId = async (githubId: number) => {
     githubId: row.githubId,
     firstName: row.firstName,
     lastName: row.lastName,
-  };
-};
+  }
+}

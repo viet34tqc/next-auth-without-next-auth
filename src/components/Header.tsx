@@ -1,38 +1,30 @@
-import SignOutButton from '@/app/(auth)/sign-out/sign-out-button';
-import { getAuth } from '@/lib/auth/cookie';
-import Link from 'next/link';
+import SignOutButton from '@/app/(auth)/sign-out/sign-out-button'
+import { getAuth } from '@/lib/auth/cookie'
+import Link from 'next/link'
 
 const Header = async () => {
-  const { user } = await getAuth();
+  const { user } = await getAuth()
   const appNav = (
     <>
-      <li>
-        <Link href="/">LOGO</Link>
-      </li>
-      <li>
-        <Link href="/dashboard">Dashboard</Link>
-      </li>
-      <li>
-        <SignOutButton />
-      </li>
+      <Link href='/'>Home</Link>
+      <Link href='/dashboard'>Dashboard</Link>
+      <SignOutButton />
     </>
-  );
+  )
   const authNav = (
     <>
-      <li>
-        <Link href="/sign-up">Sign Up</Link>
-      </li>
-      <li>
-        <Link href="/login">Sign In</Link>
-      </li>
+      <Link href='/sign-up'>Sign Up</Link>
+      <Link href='/login'>Sign In</Link>
     </>
-  );
+  )
 
   return (
     <header>
-      <ul>{user ? appNav : authNav}</ul>
+      <nav className='container px-8 flex justify-between py-5 border-b'>
+        {user ? appNav : authNav}
+      </nav>
     </header>
-  );
-};
+  )
+}
 
-export default Header;
+export default Header

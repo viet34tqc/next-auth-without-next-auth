@@ -1,6 +1,16 @@
-// src/app/page.tsx
-const PublicHomePage = () => {
-  return <p>Welcome to the demo of authentication without next auth</p>;
-};
+import { PATHS } from '@/path'
+import Link from 'next/link'
 
-export default PublicHomePage;
+// src/app/page.tsx
+const HomePage = () => {
+  return (
+    <div className='space-y-4'>
+      <h1 className='text-3xl font-bold tracking-tight'>Homepage</h1>
+      <Link href={PATHS.tickets()} className='underline'>
+        Tickets
+      </Link>
+    </div>
+  )
+}
+
+export default HomePage

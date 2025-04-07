@@ -2,3 +2,10 @@
 body {
   font-family: Arial, Helvetica, sans-serif;
 }
+
+@media (prefers-color-scheme: dark) {
+  body {
+    background-color: theme('colors.gray.900');
+    color: theme('colors.gray.100');
+  }
+}

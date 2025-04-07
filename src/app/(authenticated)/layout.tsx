@@ -1,18 +1,18 @@
-import { getAuth } from '@/lib/auth/cookie';
-import { redirect } from 'next/navigation';
+import { getAuth } from '@/lib/auth/cookie'
+import { redirect } from 'next/navigation'
 
 const AuthenticatedLayout = async ({
   children,
 }: Readonly<{
-  children: React.ReactNode;
+  children: React.ReactNode
 }>) => {
-  const { user } = await getAuth();
+  const { user } = await getAuth()
 
   if (!user) {
-    redirect('/login');
+    redirect('/login')
   }
 
-  return <>{children}</>;
-};
+  return <>{children}</>
+}
 
-export default AuthenticatedLayout;
+export default AuthenticatedLayout
