@@ -1,4 +1,4 @@
 export const PATHS = {
-  tickets: () => '/tickets',
-  ticket: (ticketId: string) => `/tickets/${ticketId}`,
+  posts: () => '/posts',
+  post: (postId: string) => `${PATHS.posts()}/${postId}`,
 }

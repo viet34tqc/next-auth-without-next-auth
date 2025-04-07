@@ -20,8 +20,8 @@ const Header = async () => {
 
   return (
     <header>
-      <nav className='container px-8 flex justify-between py-5 border-b'>
-        {user ? appNav : authNav}
+      <nav className='py-5 border-b'>
+        <div className='container flex justify-between '>{user ? appNav : authNav}</div>
       </nav>
     </header>
   )

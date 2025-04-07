@@ -1,6 +1,11 @@
 @import 'tailwindcss';
-body {
-  font-family: Arial, Helvetica, sans-serif;
+@import 'tailwindcss-animated';
+
+@layer utilities {
+  .container {
+    padding-inline: 1rem;
+    margin: auto;
+  }
 }
 
 @media (prefers-color-scheme: dark) {
