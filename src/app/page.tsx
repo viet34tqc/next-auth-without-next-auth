@@ -1,3 +1,4 @@
+import PageHeader from '@/components/PageHeader'
 import { PATHS } from '@/path'
 import Link from 'next/link'
 
@@ -5,7 +6,7 @@ import Link from 'next/link'
 const HomePage = () => {
   return (
     <div className='space-y-4'>
-      <h1 className='tracking-tight'>Homepage</h1>
+      <PageHeader title='Home' />
       <Link href={PATHS.posts()} className='underline'>
         Tickets
       </Link>

@@ -1,5 +1,5 @@
-const PostDetail = ({ params }: { params: { ticketId: string } }) => {
-  console.log('params', params.ticketId)
+const PostDetail = ({ params }: { params: { postId: string } }) => {
+  console.log('params', params)
   return <div>PostDetail</div>
 }
 

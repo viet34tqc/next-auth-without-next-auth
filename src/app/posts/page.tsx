@@ -1,5 +1,5 @@
+import PageHeader from '@/components/PageHeader'
 import { Card } from '@/components/ui/card'
-import { Separator } from '@/components/ui/separator'
 import { PATHS } from '@/path'
 import Link from 'next/link'
 
@@ -19,11 +19,7 @@ const posts = [
 const PostsPage = () => {
   return (
     <div className='space-y-6'>
-      <header>
-        <h1 className='tracking-tight'>Posts</h1>
-        <p className='text-muted-foreground'>All of posts</p>
-      </header>
-      <Separator />
+      <PageHeader title='Posts' description='All of posts' />
 
       <div className='space-y-3 animate-in fade-in-10 slide-in-from-top-10 duration-600 max-w-[30rem] mx-auto'>
         {posts.map((post) => (

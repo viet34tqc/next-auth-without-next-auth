@@ -7,7 +7,7 @@ const Header = async () => {
   const { user } = await getAuth()
   const appNav = (
     <>
-      <Link href='/' className='flex items-center gap-2'>
+      <Link href='/' className='flex items-center gap-2 mr-auto'>
         <Newspaper size='14' /> NewsPaper
       </Link>
       <Link href='/dashboard'>Dashboard</Link>
@@ -24,7 +24,7 @@ const Header = async () => {
   return (
     <header>
       <nav className='py-5 border-b'>
-        <div className='container flex justify-between '>{user ? appNav : authNav}</div>
+        <div className='container flex justify-between gap-4'>{user ? appNav : authNav}</div>
       </nav>
     </header>
   )
