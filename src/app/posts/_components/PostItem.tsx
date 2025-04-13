@@ -21,7 +21,7 @@ const PostItem = ({ post }: Props) => {
           <StatusIcon className='size-4' aria-hidden={true} />
           <h3>{title}</h3>
         </div>
-        <p className='text-sm text-slate-500 line-clamp-3'>{content}</p>
+        <p className='text-sm line-clamp-3'>{content}</p>
 
         <p className='underline'>View</p>
       </Link>
