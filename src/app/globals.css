@@ -127,6 +127,7 @@
   h3,
   h4 {
     font-weight: var(--font-weight-bold);
+    line-height: 1.2;
   }
   h1 {
     font-size: var(--text-3xl);
@@ -136,5 +137,8 @@
   }
   h3 {
     font-size: var(--text-xl);
+  }
+  h4 {
+    font-size: var(--text-lg);
   }
 }
