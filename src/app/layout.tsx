@@ -1,4 +1,5 @@
-import Header from '@/components/Header'
+import Header from '@/components/layout/Header'
+import ThemeProvider from '@/components/theme/ThemeProvider'
 import type { Metadata } from 'next'
 import { Geist, Geist_Mono } from 'next/font/google'
 import './globals.css'
@@ -26,8 +27,10 @@ export default function RootLayout({
   return (
     <html lang='en'>
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
-        <Header />
-        <main className='container py-6 min-h-screen'>{children}</main>
+        <ThemeProvider>
+          <Header />
+          <main className='container py-6 min-h-screen'>{children}</main>
+        </ThemeProvider>
       </body>
     </html>
   )

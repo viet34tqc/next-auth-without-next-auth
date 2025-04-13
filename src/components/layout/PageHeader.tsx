@@ -1,6 +1,6 @@
 'use client'
 
-import { Separator } from './ui/separator'
+import { Separator } from '../ui/separator'
 
 type Props = {
   title: string

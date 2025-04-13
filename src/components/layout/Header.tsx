@@ -2,6 +2,7 @@ import SignOutButton from '@/app/(auth)/sign-out/sign-out-button'
 import { getAuth } from '@/lib/auth/cookie'
 import { Newspaper } from 'lucide-react'
 import Link from 'next/link'
+import ThemeSwitcher from '../theme/ThemeSwitcher'
 
 const Header = async () => {
   const { user } = await getAuth()
@@ -10,6 +11,7 @@ const Header = async () => {
       <Link href='/' className='flex items-center gap-2 mr-auto'>
         <Newspaper size='14' /> NewsPaper
       </Link>
+      <ThemeSwitcher />
       <Link href='/dashboard'>Dashboard</Link>
       <SignOutButton />
     </>
@@ -24,7 +26,9 @@ const Header = async () => {
   return (
     <header>
       <nav className='py-5 border-b'>
-        <div className='container flex justify-between gap-4'>{user ? appNav : authNav}</div>
+        <div className='container flex justify-between items-center gap-4'>
+          {user ? appNav : authNav}
+        </div>
       </nav>
     </header>
   )

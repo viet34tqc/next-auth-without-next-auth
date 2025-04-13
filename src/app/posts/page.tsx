@@ -1,4 +1,4 @@
-import PageHeader from '@/components/PageHeader'
+import PageHeader from '@/components/layout/PageHeader'
 import PostItem from './_components/PostItem'
 import { PostType } from './_types'
 
