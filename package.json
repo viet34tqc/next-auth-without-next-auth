@@ -8,7 +8,8 @@
     "start": "next start",
     "lint": "next lint",
     "prepare": "husky",
-    "format": "prettier --write ."
+    "format": "prettier --write .",
+    "postinstall": "npx prisma generate"
   },
   "dependencies": {
     "@node-rs/argon2": "^2.0.2",
