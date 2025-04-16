@@ -2,15 +2,11 @@
 
 import { Card } from '@/components/ui/card'
 import { PATHS } from '@/path'
+import { Post } from '@prisma/client'
 import Link from 'next/link'
 import { POST_STATUS_ICONS } from '../_constants'
-import { PostType } from '../_types'
 
-type Props = {
-  post: PostType
-}
-
-const PostItem = ({ post }: Props) => {
+const PostItem = ({ post }: { post: Post }) => {
   const { id, title, content, status } = post
   const StatusIcon = POST_STATUS_ICONS[status]
 
