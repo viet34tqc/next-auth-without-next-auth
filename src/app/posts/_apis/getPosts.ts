@@ -1,10 +1,10 @@
-import { MOCK_POSTS } from '../_constants'
+import { prisma } from '@/lib/prisma'
 import { PostType } from '../_types'
 
-export const getPosts = (): Promise<PostType[]> => {
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      resolve(MOCK_POSTS)
-    }, 1000)
+export const getPosts = async (): Promise<PostType[]> => {
+  return prisma.post.findMany({
+    orderBy: {
+      createdAt: 'desc',
+    },
   })
 }
