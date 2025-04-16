@@ -12,7 +12,7 @@ const PostItem = ({ post }: { post: Post }) => {
 
   return (
     <Card className='p-4' key={id}>
-      <Link href={PATHS.post(id)} className='space-y-4 block'>
+      <Link href={PATHS.post(id)} className='space-y-4 block' prefetch>
         <div className='flex items-center gap-2'>
           <StatusIcon className='size-4' aria-hidden={true} />
           <h3>{title}</h3>

@@ -2,7 +2,8 @@ import Placeholder from '@/components/layout/Placeholder'
 import { getPost } from '../_apis/getPost'
 import { DeletePostButton } from '../_components/DeletePostButton'
 
-const PostDetail = async ({ params }: { params: { postId: string } }) => {
+const PostDetail = async (props: { params: Promise<{ postId: string }> }) => {
+  const params = await props.params
   const post = await getPost(params.postId)
 
   if (post === null) {
