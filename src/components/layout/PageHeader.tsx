@@ -1,5 +1,3 @@
-'use client'
-
 import { Separator } from '../ui/separator'
 
 type Props = {
