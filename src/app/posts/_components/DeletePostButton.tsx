@@ -10,5 +10,9 @@ export const DeletePostButton = ({ id }: { id: string }) => {
     redirect('/posts')
   }
 
-  return <Button onClick={handleDelete}>Delete</Button>
+  return (
+    <Button variant={'destructive'} onClick={handleDelete}>
+      Delete
+    </Button>
+  )
 }
