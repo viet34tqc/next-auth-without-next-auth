@@ -4,7 +4,7 @@ import { Calendar, Clock } from 'lucide-react'
 import { Metadata } from 'next'
 import { getPost } from '../_apis/getPost'
 import { DeletePostButton } from '../_components/DeletePostButton'
-import { EditPostButton } from '../_components/EditPostButton'
+import { EditPostButton } from '../_components/EditPostDialog'
 
 // Generate metadata for SEO
 export async function generateMetadata({

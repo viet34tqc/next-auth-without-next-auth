@@ -15,7 +15,7 @@ import { EMPTY_FORM_STATE } from '@/lib/utils'
 import { Post } from '@prisma/client'
 import React, { useActionState, useEffect } from 'react'
 import { useFormStatus } from 'react-dom'
-import { updatePost } from '../_actions/updatePost'
+import { updatePost } from '../../_actions/updatePost'
 
 type SubmitButtonProps = {
   label: string

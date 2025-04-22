@@ -1,6 +1,6 @@
 import PageHeader from '@/components/layout/PageHeader'
 import { Suspense } from 'react'
-import { CreatePostButton } from './_components/CreatePostButton'
+import { CreatePostButton } from './_components/CreatePostDialog'
 import PostList from './_components/PostList'
 import Loading from './loading'
 

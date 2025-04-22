@@ -14,7 +14,7 @@ import { Textarea } from '@/components/ui/textarea'
 import { EMPTY_FORM_STATE } from '@/lib/utils'
 import React, { useActionState, useEffect } from 'react'
 import { useFormStatus } from 'react-dom'
-import { createPost } from '../_actions/createPost'
+import { createPost } from '../../_actions/createPost'
 
 type SubmitButtonProps = {
   label: string
