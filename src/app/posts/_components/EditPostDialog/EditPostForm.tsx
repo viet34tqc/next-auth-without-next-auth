@@ -13,7 +13,7 @@ import {
 import { Textarea } from '@/components/ui/textarea'
 import { EMPTY_FORM_STATE } from '@/lib/utils'
 import { Post } from '@prisma/client'
-import React, { useActionState, useEffect } from 'react'
+import React, { useActionState } from 'react'
 import { useFormStatus } from 'react-dom'
 import { updatePost } from '../../_actions/updatePost'
 
@@ -24,7 +24,6 @@ type SubmitButtonProps = {
 
 const SubmitButton = ({ label, loading }: SubmitButtonProps) => {
   const { pending } = useFormStatus()
-  console.log('pending', pending)
 
   return (
     <Button disabled={pending} type='submit' className='w-full'>
@@ -34,21 +33,38 @@ const SubmitButton = ({ label, loading }: SubmitButtonProps) => {
 }
 
 export function EditPostForm({ post, onSuccess }: { post: Post; onSuccess: () => void }) {
-  const [formState, formAction] = useActionState(
+  const hasSubmittedRef = React.useRef(false)
+  const [formState] = useActionState(
     (formState: typeof EMPTY_FORM_STATE, formData: FormData) =>
       updatePost(post.id, formState, formData),
     EMPTY_FORM_STATE,
   )
 
-  // Use useEffect to handle success state changes
-  useEffect(() => {
-    if (formState.status === 'SUCCESS' && formState.timestamp > 0) {
-      onSuccess()
+  // Custom action wrapper to prevent multiple submissions and handle success immediately
+  const handleSubmit = async (formData: FormData) => {
+    // Prevent submission if already submitted
+    if (hasSubmittedRef.current) return
+
+    hasSubmittedRef.current = true
+
+    try {
+      const result = await updatePost(post.id, EMPTY_FORM_STATE, formData)
+
+      if (result.status === 'SUCCESS') {
+        // Close the dialog immediately on success
+        onSuccess()
+      } else {
+        hasSubmittedRef.current = false
+      }
+    } catch (error) {
+      // Handle any unexpected errors
+      hasSubmittedRef.current = false
+      console.error('Error updating post:', error)
     }
-  }, [formState, onSuccess])
+  }
 
   return (
-    <form action={formAction} className='space-y-6'>
+    <form action={handleSubmit} className='space-y-6'>
       <div className='space-y-2'>
         <Label htmlFor='title'>Title</Label>
         <Input id='title' name='title' placeholder='Post title' defaultValue={post.title} />

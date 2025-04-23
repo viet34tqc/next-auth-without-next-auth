@@ -13,7 +13,7 @@ import {
 import { Button } from '@/components/ui/button'
 import { PATHS } from '@/path'
 import { useRouter } from 'next/navigation'
-import { useState } from 'react'
+import React, { useState } from 'react'
 import { useFormStatus } from 'react-dom'
 import { deletePost } from '../_actions/deletePost'
 
@@ -31,13 +31,28 @@ function DeleteButton() {
 export const DeletePostButton = ({ id }: { id: string }) => {
   const [open, setOpen] = useState(false)
   const router = useRouter()
+  // We'll use a ref to track if the form has been submitted
+  const hasSubmittedRef = React.useRef(false)
 
-  // Handle delete with UI-controlled navigation
+  // Handle delete with UI-controlled navigation and prevent multiple submissions
   const deletePostWithId = async () => {
-    const result = await deletePost(id)
-    if (result.status === 'SUCCESS') {
-      setOpen(false)
-      router.push(PATHS.posts())
+    // Prevent submission if already submitted
+    if (hasSubmittedRef.current) return
+
+    hasSubmittedRef.current = true
+
+    try {
+      const result = await deletePost(id)
+
+      if (result.status === 'SUCCESS') {
+        setOpen(false)
+        router.push(PATHS.posts())
+      } else {
+        hasSubmittedRef.current = false
+      }
+    } catch (error) {
+      hasSubmittedRef.current = false
+      console.error('Error deleting post:', error)
     }
   }
 

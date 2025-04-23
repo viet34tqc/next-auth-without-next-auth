@@ -32,6 +32,7 @@ export function CreatePostForm({ onSuccess }: { onSuccess: () => void }) {
         // Close the dialog immediately on success
         onSuccess()
       } else {
+        // reset if there was an error (allow the form to be submitted again)
         hasSubmittedRef.current = false
       }
     } catch (error) {
