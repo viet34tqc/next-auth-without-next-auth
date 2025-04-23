@@ -1,6 +1,5 @@
 'use client'
 
-import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import {
@@ -12,40 +11,18 @@ import {
 } from '@/components/ui/select'
 import { Textarea } from '@/components/ui/textarea'
 import { EMPTY_FORM_STATE } from '@/lib/utils'
-import React, { useActionState, useState } from 'react'
-import { useFormStatus } from 'react-dom'
+import React, { useActionState } from 'react'
 import { createPost } from '../../_actions/createPost'
-
-type SubmitButtonProps = {
-  label: string
-  loading: React.ReactNode
-}
-
-const SubmitButton = ({
-  label,
-  loading,
-  isSubmitting,
-}: SubmitButtonProps & { isSubmitting: boolean }) => {
-  const { pending } = useFormStatus()
-  const isDisabled = pending || isSubmitting
-
-  return (
-    <Button disabled={isDisabled} type='submit' className='w-full'>
-      {isDisabled ? loading : label}
-    </Button>
-  )
-}
+import { SubmitButton } from '../SubmitButton'
 
 export function CreatePostForm({ onSuccess }: { onSuccess: () => void }) {
-  // We'll use a ref to track if the form has been submitted
+  // I use a ref as synchronous protection against multiple submissions
   const hasSubmittedRef = React.useRef(false)
   const [formState] = useActionState(createPost, EMPTY_FORM_STATE)
-  const [isSubmitting, setIsSubmitting] = useState(false)
 
   const handleSubmit = async (formData: FormData) => {
-    if (isSubmitting || hasSubmittedRef.current) return
+    if (hasSubmittedRef.current) return
 
-    setIsSubmitting(true)
     hasSubmittedRef.current = true
 
     try {
@@ -55,13 +32,9 @@ export function CreatePostForm({ onSuccess }: { onSuccess: () => void }) {
         // Close the dialog immediately on success
         onSuccess()
       } else {
-        // Only reset if there was an error (allow form to be submitted again)
-        setIsSubmitting(false)
         hasSubmittedRef.current = false
       }
     } catch (error) {
-      // Handle any unexpected errors
-      setIsSubmitting(false)
       hasSubmittedRef.current = false
       console.error('Error submitting form:', error)
     }
@@ -119,7 +92,7 @@ export function CreatePostForm({ onSuccess }: { onSuccess: () => void }) {
         <p className='text-destructive text-sm font-medium'>{formState.message}</p>
       )}
 
-      <SubmitButton label='Create Post' loading='Creating...' isSubmitting={isSubmitting} />
+      <SubmitButton label='Create Post' loading='Creating...' />
     </form>
   )
 }
