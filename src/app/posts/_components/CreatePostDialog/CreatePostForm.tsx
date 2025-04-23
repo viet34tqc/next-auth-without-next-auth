@@ -12,7 +12,7 @@ import {
 } from '@/components/ui/select'
 import { Textarea } from '@/components/ui/textarea'
 import { EMPTY_FORM_STATE } from '@/lib/utils'
-import React, { useActionState, useEffect } from 'react'
+import React, { useActionState, useState } from 'react'
 import { useFormStatus } from 'react-dom'
 import { createPost } from '../../_actions/createPost'
 
@@ -21,29 +21,54 @@ type SubmitButtonProps = {
   loading: React.ReactNode
 }
 
-const SubmitButton = ({ label, loading }: SubmitButtonProps) => {
+const SubmitButton = ({
+  label,
+  loading,
+  isSubmitting,
+}: SubmitButtonProps & { isSubmitting: boolean }) => {
   const { pending } = useFormStatus()
+  const isDisabled = pending || isSubmitting
 
   return (
-    <Button disabled={pending} type='submit' className='w-full'>
-      {pending ? loading : label}
+    <Button disabled={isDisabled} type='submit' className='w-full'>
+      {isDisabled ? loading : label}
     </Button>
   )
 }
 
 export function CreatePostForm({ onSuccess }: { onSuccess: () => void }) {
-  const [formState, action] = useActionState(createPost, EMPTY_FORM_STATE)
+  // We'll use a ref to track if the form has been submitted
+  const hasSubmittedRef = React.useRef(false)
+  const [formState] = useActionState(createPost, EMPTY_FORM_STATE)
+  const [isSubmitting, setIsSubmitting] = useState(false)
 
-  // Use useEffect to handle success state changes, otherwise it will raise error
-  // Cannot update a component (`CreatePostButton`) while rendering a different component (`CreatePostForm`)
-  useEffect(() => {
-    if (formState.status === 'SUCCESS' && formState.timestamp > 0) {
-      onSuccess()
+  const handleSubmit = async (formData: FormData) => {
+    if (isSubmitting || hasSubmittedRef.current) return
+
+    setIsSubmitting(true)
+    hasSubmittedRef.current = true
+
+    try {
+      const result = await createPost(EMPTY_FORM_STATE, formData)
+
+      if (result.status === 'SUCCESS') {
+        // Close the dialog immediately on success
+        onSuccess()
+      } else {
+        // Only reset if there was an error (allow form to be submitted again)
+        setIsSubmitting(false)
+        hasSubmittedRef.current = false
+      }
+    } catch (error) {
+      // Handle any unexpected errors
+      setIsSubmitting(false)
+      hasSubmittedRef.current = false
+      console.error('Error submitting form:', error)
     }
-  }, [formState, onSuccess])
+  }
 
   return (
-    <form action={action} className='space-y-6'>
+    <form action={handleSubmit} className='space-y-6'>
       <div className='space-y-2'>
         <Label htmlFor='title'>Title</Label>
         <Input id='title' name='title' placeholder='Post title' />
@@ -94,7 +119,7 @@ export function CreatePostForm({ onSuccess }: { onSuccess: () => void }) {
         <p className='text-destructive text-sm font-medium'>{formState.message}</p>
       )}
 
-      <SubmitButton label='Create Post' loading='Creating...' />
+      <SubmitButton label='Create Post' loading='Creating...' isSubmitting={isSubmitting} />
     </form>
   )
 }

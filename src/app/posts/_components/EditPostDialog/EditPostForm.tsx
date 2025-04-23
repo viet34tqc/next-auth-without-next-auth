@@ -24,6 +24,7 @@ type SubmitButtonProps = {
 
 const SubmitButton = ({ label, loading }: SubmitButtonProps) => {
   const { pending } = useFormStatus()
+  console.log('pending', pending)
 
   return (
     <Button disabled={pending} type='submit' className='w-full'>
