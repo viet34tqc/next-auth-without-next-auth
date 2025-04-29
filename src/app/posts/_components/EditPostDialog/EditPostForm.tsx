@@ -11,39 +11,27 @@ import {
   SelectValue,
 } from '@/components/ui/select'
 import { Textarea } from '@/components/ui/textarea'
-import { EMPTY_FORM_STATE } from '@/lib/types'
+import { EMPTY_FORM_STATE } from '@/lib/constants'
 import { Post } from '@prisma/client'
-import { useActionState, useTransition } from 'react'
+import { useActionState, useEffect } from 'react'
 import { updatePost } from '../../_actions/updatePost'
 import { SubmitButton } from '../SubmitButton'
 
 export function EditPostForm({ post, onSuccess }: { post: Post; onSuccess: () => void }) {
-  const [isPending, startTransition] = useTransition()
-  const [formState] = useActionState(
+  const [formState, action] = useActionState(
     (formState: typeof EMPTY_FORM_STATE, formData: FormData) =>
       updatePost(post.id, formState, formData),
     EMPTY_FORM_STATE,
   )
 
-  // Custom action wrapper to prevent multiple submissions and handle success immediately
-  const handleSubmit = async (formData: FormData) => {
-    if (isPending) return
-
-    try {
-      startTransition(async () => {
-        const result = await updatePost(post.id, EMPTY_FORM_STATE, formData)
-
-        if (result.status === 'SUCCESS') {
-          onSuccess()
-        }
-      })
-    } catch (error) {
-      console.error('Error submitting form:', error)
+  useEffect(() => {
+    if (formState.status === 'SUCCESS') {
+      onSuccess()
     }
-  }
+  }, [formState.status, onSuccess])
 
   return (
-    <form action={handleSubmit} className='space-y-6'>
+    <form action={action} className='space-y-6'>
       <div className='space-y-2'>
         <Label htmlFor='title'>Title</Label>
         <Input id='title' name='title' placeholder='Post title' defaultValue={post.title} />
