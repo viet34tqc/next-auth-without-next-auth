@@ -1,5 +1,6 @@
 'use client'
 
+import { FieldError } from '@/components/FieldError'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import {
@@ -10,33 +11,27 @@ import {
   SelectValue,
 } from '@/components/ui/select'
 import { Textarea } from '@/components/ui/textarea'
-import { EMPTY_FORM_STATE } from '@/lib/utils'
-import React, { useActionState } from 'react'
+import { EMPTY_FORM_STATE } from '@/lib/types'
+import { useActionState, useTransition } from 'react'
 import { createPost } from '../../_actions/createPost'
 import { SubmitButton } from '../SubmitButton'
 
 export function CreatePostForm({ onSuccess }: { onSuccess: () => void }) {
-  // I use a ref as synchronous protection against multiple submissions
-  const hasSubmittedRef = React.useRef(false)
   const [formState] = useActionState(createPost, EMPTY_FORM_STATE)
+  const [isPending, startTransition] = useTransition()
 
   const handleSubmit = async (formData: FormData) => {
-    if (hasSubmittedRef.current) return
-
-    hasSubmittedRef.current = true
+    if (isPending) return
 
     try {
-      const result = await createPost(EMPTY_FORM_STATE, formData)
+      startTransition(async () => {
+        const result = await createPost(EMPTY_FORM_STATE, formData)
 
-      if (result.status === 'SUCCESS') {
-        // Close the dialog immediately on success
-        onSuccess()
-      } else {
-        // reset if there was an error (allow the form to be submitted again)
-        hasSubmittedRef.current = false
-      }
+        if (result.status === 'SUCCESS') {
+          onSuccess()
+        }
+      })
     } catch (error) {
-      hasSubmittedRef.current = false
       console.error('Error submitting form:', error)
     }
   }
@@ -46,9 +41,7 @@ export function CreatePostForm({ onSuccess }: { onSuccess: () => void }) {
       <div className='space-y-2'>
         <Label htmlFor='title'>Title</Label>
         <Input id='title' name='title' placeholder='Post title' />
-        {formState.fieldErrors.title && (
-          <p className='text-destructive text-sm'>{formState.fieldErrors.title[0]}</p>
-        )}
+        <FieldError formState={formState} name='title' />
       </div>
 
       <div className='space-y-2'>
@@ -59,9 +52,7 @@ export function CreatePostForm({ onSuccess }: { onSuccess: () => void }) {
           placeholder='Post content'
           className='min-h-[100px] resize-none'
         />
-        {formState.fieldErrors.content && (
-          <p className='text-destructive text-sm'>{formState.fieldErrors.content[0]}</p>
-        )}
+        <FieldError formState={formState} name='content' />
       </div>
 
       <div className='space-y-2'>
@@ -84,9 +75,7 @@ export function CreatePostForm({ onSuccess }: { onSuccess: () => void }) {
             <SelectItem value='PENDING'>Pending</SelectItem>
           </SelectContent>
         </Select>
-        {formState.fieldErrors.status && (
-          <p className='text-destructive text-sm'>{formState.fieldErrors.status[0]}</p>
-        )}
+        <FieldError formState={formState} name='status' />
       </div>
 
       {formState.status === 'ERROR' && formState.message && (

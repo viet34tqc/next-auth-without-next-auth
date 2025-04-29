@@ -1,7 +1,8 @@
 'use server'
 
 import { prisma } from '@/lib/prisma'
-import { FormState, fromErrorfromMessageToFormState, fromMessageToFormState } from '@/lib/utils'
+import { FormState } from '@/lib/types'
+import { fromErrorfromMessageToFormState, fromMessageToFormState } from '@/lib/utils'
 import { PATHS } from '@/path'
 import { revalidatePath } from 'next/cache'
 import { z } from 'zod'

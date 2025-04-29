@@ -1,20 +1,7 @@
 import { clsx, type ClassValue } from 'clsx'
 import { twMerge } from 'tailwind-merge'
 import { ZodError } from 'zod'
-
-export type FormState = {
-  status: 'UNSET' | 'SUCCESS' | 'ERROR'
-  message: string
-  fieldErrors: Record<string, string[] | undefined>
-  timestamp: number
-}
-
-export const EMPTY_FORM_STATE: FormState = {
-  status: 'UNSET' as const,
-  message: '',
-  fieldErrors: {},
-  timestamp: Date.now(),
-}
+import { FormState } from './types'
 
 export const fromErrorfromMessageToFormState = (error: unknown) => {
   // if validation error with Zod, return first error message

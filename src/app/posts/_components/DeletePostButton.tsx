@@ -13,45 +13,28 @@ import {
 import { Button } from '@/components/ui/button'
 import { PATHS } from '@/path'
 import { useRouter } from 'next/navigation'
-import React, { useState } from 'react'
-import { useFormStatus } from 'react-dom'
+import { useState, useTransition } from 'react'
 import { deletePost } from '../_actions/deletePost'
-
-// Submit button with loading state
-function DeleteButton() {
-  const { pending } = useFormStatus()
-
-  return (
-    <Button variant='destructive' type='submit' disabled={pending}>
-      {pending ? 'Deleting...' : 'Delete'}
-    </Button>
-  )
-}
 
 export const DeletePostButton = ({ id }: { id: string }) => {
   const [open, setOpen] = useState(false)
   const router = useRouter()
-  // We'll use a ref to track if the form has been submitted
-  const hasSubmittedRef = React.useRef(false)
+  const [isPending, startTransition] = useTransition()
 
-  // Handle delete with UI-controlled navigation and prevent multiple submissions
-  const deletePostWithId = async () => {
-    // Prevent submission if already submitted
-    if (hasSubmittedRef.current) return
-
-    hasSubmittedRef.current = true
-
+  const handleDeletePost = async () => {
+    if (isPending) return
     try {
       const result = await deletePost(id)
 
       if (result.status === 'SUCCESS') {
-        setOpen(false)
-        router.push(PATHS.posts())
+        startTransition(() => {
+          setOpen(false)
+          router.push(PATHS.posts())
+        })
       } else {
-        hasSubmittedRef.current = false
+        console.error('Failed to delete post.')
       }
     } catch (error) {
-      hasSubmittedRef.current = false
       console.error('Error deleting post:', error)
     }
   }
@@ -71,9 +54,15 @@ export const DeletePostButton = ({ id }: { id: string }) => {
         </AlertDialogHeader>
         <AlertDialogFooter>
           <AlertDialogCancel>Cancel</AlertDialogCancel>
-          <form action={deletePostWithId} className='inline-block'>
-            <DeleteButton />
-          </form>
+          {/* We are not using formState to display the error message, we can get the error message from calling the server action */}
+          <Button
+            variant='destructive'
+            onClick={handleDeletePost}
+            type='submit'
+            disabled={isPending}
+          >
+            {isPending ? 'Deleting...' : 'Delete'}
+          </Button>
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>

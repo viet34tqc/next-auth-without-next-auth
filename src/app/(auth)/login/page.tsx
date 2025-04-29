@@ -1,10 +1,10 @@
 'use client'
 
-import { EMPTY_FORM_STATE } from '@/lib/utils'
+import { FieldError } from '@/components/FieldError'
+import { EMPTY_FORM_STATE } from '@/lib/types'
 import Link from 'next/link'
 import { useActionState } from 'react'
 import { useFormStatus } from 'react-dom'
-import { FieldError } from '../../../components/FieldError'
 import { signIn } from './_actions/signIn'
 type SubmitButtonProps = {
   label: string
