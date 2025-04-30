@@ -11,33 +11,24 @@ import {
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog'
 import { Button } from '@/components/ui/button'
-import { PATHS } from '@/path'
-import { useRouter } from 'next/navigation'
-import { useState, useTransition } from 'react'
+import { EMPTY_FORM_STATE } from '@/lib/constants'
+import { useActionState, useState } from 'react'
+import { useFormStatus } from 'react-dom'
 import { deletePost } from '../_actions/deletePost'
+
+const DeleteButton = () => {
+  const { pending } = useFormStatus()
+  return (
+    <Button variant='destructive' type='submit' disabled={pending}>
+      {pending ? 'Deleting...' : 'Delete'}
+    </Button>
+  )
+}
 
 export const DeletePostButton = ({ id }: { id: string }) => {
   const [open, setOpen] = useState(false)
-  const router = useRouter()
-  const [isPending, startTransition] = useTransition()
-
-  const handleDeletePost = async () => {
-    if (isPending) return
-    try {
-      const result = await deletePost(id)
-
-      if (result.status === 'SUCCESS') {
-        startTransition(() => {
-          setOpen(false)
-          router.push(PATHS.posts())
-        })
-      } else {
-        console.error('Failed to delete post.')
-      }
-    } catch (error) {
-      console.error('Error deleting post:', error)
-    }
-  }
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [_, action] = useActionState(() => deletePost(id), EMPTY_FORM_STATE)
 
   return (
     <AlertDialog open={open} onOpenChange={setOpen}>
@@ -54,15 +45,9 @@ export const DeletePostButton = ({ id }: { id: string }) => {
         </AlertDialogHeader>
         <AlertDialogFooter>
           <AlertDialogCancel>Cancel</AlertDialogCancel>
-          {/* We are not using formState to display the error message, we can get the error message from calling the server action */}
-          <Button
-            variant='destructive'
-            onClick={handleDeletePost}
-            type='submit'
-            disabled={isPending}
-          >
-            {isPending ? 'Deleting...' : 'Delete'}
-          </Button>
+          <form action={action}>
+            <DeleteButton />
+          </form>
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>
