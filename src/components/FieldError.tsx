@@ -1,7 +1,7 @@
-import { FormState } from '@/lib/types'
+import { ActionState } from '@/lib/types'
 
 type FieldErrorProps = {
-  formState: FormState
+  formState: ActionState
   name: string
 }
 

@@ -4,7 +4,8 @@ import { setSessionCookie } from '@/lib/auth/cookie'
 import { verifyHashPassword } from '@/lib/auth/password'
 import { createSession, generateRandomSessionToken } from '@/lib/auth/session'
 import { prisma } from '@/lib/prisma'
-import { FormState, fromErrorfromMessageToFormState, fromMessageToFormState } from '@/lib/utils'
+import { ActionState } from '@/lib/types'
+import { fromErrorfromMessageToFormState, fromMessageToFormState } from '@/lib/utils'
 import { z } from 'zod'
 
 const signInSchema = z.object({
@@ -12,7 +13,7 @@ const signInSchema = z.object({
   password: z.string().min(1),
 })
 
-export const signIn = async (formState: FormState, formData: FormData) => {
+export const signIn = async (formState: ActionState, formData: FormData) => {
   try {
     const formDataRaw = Object.fromEntries(formData.entries())
     const data = signInSchema.parse(formDataRaw)

@@ -1,7 +1,7 @@
 'use server'
 
 import { prisma } from '@/lib/prisma'
-import { FormState } from '@/lib/types'
+import { ActionState } from '@/lib/types'
 import { fromErrorfromMessageToFormState, fromMessageToFormState } from '@/lib/utils'
 import { PATHS } from '@/path'
 import { revalidatePath } from 'next/cache'
@@ -23,7 +23,7 @@ const postSchema = z.object({
 
 export type PostFormValues = z.infer<typeof postSchema>
 
-export async function createPost(formState: FormState, formData: FormData) {
+export async function createPost(formState: ActionState, formData: FormData) {
   try {
     const formDataRaw = Object.fromEntries(formData.entries())
     const data = postSchema.parse(formDataRaw)

@@ -1,7 +1,7 @@
 import { clsx, type ClassValue } from 'clsx'
 import { twMerge } from 'tailwind-merge'
 import { ZodError } from 'zod'
-import { FormState } from './types'
+import { ActionState } from './types'
 
 export const fromErrorfromMessageToFormState = (error: unknown) => {
   // if validation error with Zod, return first error message
@@ -29,7 +29,10 @@ export const fromErrorfromMessageToFormState = (error: unknown) => {
   }
 }
 
-export const fromMessageToFormState = (status: FormState['status'], message: string): FormState => {
+export const fromMessageToFormState = (
+  status: ActionState['status'],
+  message: string,
+): ActionState => {
   return {
     status,
     message,

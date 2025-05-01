@@ -1,4 +1,4 @@
-export type FormState = {
+export type ActionState = {
   status: 'UNSET' | 'SUCCESS' | 'ERROR'
   message: string
   fieldErrors: Record<string, string[] | undefined>
