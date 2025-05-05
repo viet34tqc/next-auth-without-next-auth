@@ -1,7 +1,7 @@
 'use client'
 
 import { FieldError } from '@/components/FieldError'
-import { EMPTY_FORM_STATE } from '@/lib/types'
+import { EMPTY_FORM_STATE } from '@/lib/constants'
 import Link from 'next/link'
 import { useActionState } from 'react'
 import { useFormStatus } from 'react-dom'

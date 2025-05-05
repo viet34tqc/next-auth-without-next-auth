@@ -1,5 +1,6 @@
 'use client'
 
+import useActionFeedback from '@/app/hooks/useActionFeedback'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import {
@@ -11,26 +12,35 @@ import {
 } from '@/components/ui/select'
 import { Textarea } from '@/components/ui/textarea'
 import { EMPTY_FORM_STATE } from '@/lib/constants'
-import { useActionState, useEffect } from 'react'
+import { useActionState } from 'react'
+import { toast } from 'sonner'
 import { createPost } from '../../_actions/createPost'
 import { SubmitButton } from '../SubmitButton'
 
 export function CreatePostForm({ onSuccess }: { onSuccess: () => void }) {
-  const [formState, action] = useActionState(createPost, EMPTY_FORM_STATE)
+  const [actionState, action] = useActionState(createPost, EMPTY_FORM_STATE)
 
-  useEffect(() => {
-    if (formState.status === 'SUCCESS') {
+  useActionFeedback(actionState, {
+    onSuccess: () => {
+      if (actionState.message) {
+        toast.success(actionState.message)
+      }
       onSuccess()
-    }
-  }, [formState.status, onSuccess])
+    },
+    onError: () => {
+      if (actionState.message) {
+        toast.error(actionState.message)
+      }
+    },
+  })
 
   return (
     <form action={action} className='space-y-6'>
       <div className='space-y-2'>
         <Label htmlFor='title'>Title</Label>
         <Input id='title' name='title' placeholder='Post title' />
-        {formState.fieldErrors.title && (
-          <p className='text-destructive text-sm'>{formState.fieldErrors.title[0]}</p>
+        {actionState.fieldErrors.title && (
+          <p className='text-destructive text-sm'>{actionState.fieldErrors.title[0]}</p>
         )}
       </div>
 
@@ -42,8 +52,8 @@ export function CreatePostForm({ onSuccess }: { onSuccess: () => void }) {
           placeholder='Post content'
           className='min-h-[100px] resize-none'
         />
-        {formState.fieldErrors.content && (
-          <p className='text-destructive text-sm'>{formState.fieldErrors.content[0]}</p>
+        {actionState.fieldErrors.content && (
+          <p className='text-destructive text-sm'>{actionState.fieldErrors.content[0]}</p>
         )}
       </div>
 
@@ -67,13 +77,13 @@ export function CreatePostForm({ onSuccess }: { onSuccess: () => void }) {
             <SelectItem value='PENDING'>Pending</SelectItem>
           </SelectContent>
         </Select>
-        {formState.fieldErrors.status && (
-          <p className='text-destructive text-sm'>{formState.fieldErrors.status[0]}</p>
+        {actionState.fieldErrors.status && (
+          <p className='text-destructive text-sm'>{actionState.fieldErrors.status[0]}</p>
         )}
       </div>
 
-      {formState.status === 'ERROR' && formState.message && (
-        <p className='text-destructive text-sm font-medium'>{formState.message}</p>
+      {actionState.status === 'ERROR' && actionState.message && (
+        <p className='text-destructive text-sm font-medium'>{actionState.message}</p>
       )}
 
       <SubmitButton label='Create Post' loading='Creating...' />
