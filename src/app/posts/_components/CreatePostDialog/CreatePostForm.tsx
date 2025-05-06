@@ -1,6 +1,7 @@
 'use client'
 
 import useActionFeedback from '@/app/hooks/useActionFeedback'
+import { FieldError } from '@/components/FieldError'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import {
@@ -39,9 +40,7 @@ export function CreatePostForm({ onSuccess }: { onSuccess: () => void }) {
       <div className='space-y-2'>
         <Label htmlFor='title'>Title</Label>
         <Input id='title' name='title' placeholder='Post title' />
-        {actionState.fieldErrors.title && (
-          <p className='text-destructive text-sm'>{actionState.fieldErrors.title[0]}</p>
-        )}
+        <FieldError actionState={actionState} name='title' />
       </div>
 
       <div className='space-y-2'>
@@ -52,9 +51,7 @@ export function CreatePostForm({ onSuccess }: { onSuccess: () => void }) {
           placeholder='Post content'
           className='min-h-[100px] resize-none'
         />
-        {actionState.fieldErrors.content && (
-          <p className='text-destructive text-sm'>{actionState.fieldErrors.content[0]}</p>
-        )}
+        <FieldError actionState={actionState} name='content' />
       </div>
 
       <div className='space-y-2'>
@@ -77,9 +74,7 @@ export function CreatePostForm({ onSuccess }: { onSuccess: () => void }) {
             <SelectItem value='PENDING'>Pending</SelectItem>
           </SelectContent>
         </Select>
-        {actionState.fieldErrors.status && (
-          <p className='text-destructive text-sm'>{actionState.fieldErrors.status[0]}</p>
-        )}
+        <FieldError actionState={actionState} name='status' />
       </div>
 
       {actionState.status === 'ERROR' && actionState.message && (

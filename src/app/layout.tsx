@@ -1,3 +1,4 @@
+import CookieToastWrapper from '@/components/CookieToast/Wrapper'
 import Header from '@/components/layout/Header'
 import ThemeProvider from '@/components/theme/ThemeProvider'
 import { Toaster } from '@/components/ui/sonner'
@@ -33,6 +34,7 @@ export default function RootLayout({
           <main className='container py-6 min-h-screen'>{children}</main>
         </ThemeProvider>
         <Toaster />
+        <CookieToastWrapper />
       </body>
     </html>
   )

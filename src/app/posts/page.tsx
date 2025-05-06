@@ -1,4 +1,3 @@
-import CookieToastWrapper from '@/components/CookieToast/Wrapper'
 import PageHeader from '@/components/layout/PageHeader'
 import { Suspense } from 'react'
 import { CreatePostButton } from './_components/CreatePostDialog'
@@ -13,8 +12,6 @@ const PostsPage = async () => {
       <Suspense fallback={<Loading />}>
         <PostList />
       </Suspense>
-
-      <CookieToastWrapper />
     </div>
   )
 }

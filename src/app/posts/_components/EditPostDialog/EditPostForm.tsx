@@ -1,5 +1,6 @@
 'use client'
 
+import useActionFeedback from '@/app/hooks/useActionFeedback'
 import { FieldError } from '@/components/FieldError'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
@@ -13,29 +14,37 @@ import {
 import { Textarea } from '@/components/ui/textarea'
 import { EMPTY_FORM_STATE } from '@/lib/constants'
 import { Post } from '@prisma/client'
-import { useActionState, useEffect } from 'react'
+import { useActionState } from 'react'
+import { toast } from 'sonner'
 import { updatePost } from '../../_actions/updatePost'
 import { SubmitButton } from '../SubmitButton'
 
 export function EditPostForm({ post, onSuccess }: { post: Post; onSuccess: () => void }) {
-  const [formState, action] = useActionState(
-    (formState: typeof EMPTY_FORM_STATE, formData: FormData) =>
-      updatePost(post.id, formState, formData),
+  const [actionState, action] = useActionState(
+    (actionState: typeof EMPTY_FORM_STATE, formData: FormData) =>
+      updatePost(post.id, actionState, formData),
     EMPTY_FORM_STATE,
   )
-
-  useEffect(() => {
-    if (formState.status === 'SUCCESS') {
+  useActionFeedback(actionState, {
+    onSuccess: () => {
+      if (actionState.message) {
+        toast.success(actionState.message)
+      }
       onSuccess()
-    }
-  }, [formState.status, onSuccess])
+    },
+    onError: () => {
+      if (actionState.message) {
+        toast.error(actionState.message)
+      }
+    },
+  })
 
   return (
     <form action={action} className='space-y-6'>
       <div className='space-y-2'>
         <Label htmlFor='title'>Title</Label>
         <Input id='title' name='title' placeholder='Post title' defaultValue={post.title} />
-        <FieldError formState={formState} name='title' />
+        <FieldError actionState={actionState} name='title' />
       </div>
 
       <div className='space-y-2'>
@@ -47,7 +56,7 @@ export function EditPostForm({ post, onSuccess }: { post: Post; onSuccess: () =>
           className='min-h-[100px] resize-none'
           defaultValue={post.content}
         />
-        <FieldError formState={formState} name='content' />
+        <FieldError actionState={actionState} name='content' />
       </div>
 
       <div className='space-y-2'>
@@ -70,11 +79,11 @@ export function EditPostForm({ post, onSuccess }: { post: Post; onSuccess: () =>
             <SelectItem value='PENDING'>Pending</SelectItem>
           </SelectContent>
         </Select>
-        <FieldError formState={formState} name='status' />
+        <FieldError actionState={actionState} name='status' />
       </div>
 
-      {formState.status === 'ERROR' && formState.message && (
-        <p className='text-destructive text-sm font-medium'>{formState.message}</p>
+      {actionState.status === 'ERROR' && actionState.message && (
+        <p className='text-destructive text-sm font-medium'>{actionState.message}</p>
       )}
 
       <SubmitButton label='Update Post' loading='Updating...' />
