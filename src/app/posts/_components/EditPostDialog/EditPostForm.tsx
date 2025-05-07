@@ -5,13 +5,7 @@ import { FieldError } from '@/components/FieldError'
 import { DatePicker } from '@/components/ui/datepicker'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select'
+import { SelectWithHiddenInput } from '@/components/ui/select-with-hidden-input'
 import { Textarea } from '@/components/ui/textarea'
 import { EMPTY_FORM_STATE } from '@/lib/constants'
 import { Post } from '@prisma/client'
@@ -62,24 +56,16 @@ export function EditPostForm({ post, onSuccess }: { post: Post; onSuccess: () =>
 
       <div className='space-y-2'>
         <Label htmlFor='status'>Status</Label>
-        <input type='hidden' name='status' id='status-hidden' value={post.status} />
-        <Select
+        <SelectWithHiddenInput
           name='status'
           defaultValue={post.status}
-          onValueChange={(value) => {
-            const hiddenInput = document.getElementById('status-hidden') as HTMLInputElement
-            if (hiddenInput) hiddenInput.value = value
-          }}
-        >
-          <SelectTrigger className='w-full'>
-            <SelectValue placeholder='Select a status' />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value='DRAFT'>Draft</SelectItem>
-            <SelectItem value='PUBLISHED'>Published</SelectItem>
-            <SelectItem value='PENDING'>Pending</SelectItem>
-          </SelectContent>
-        </Select>
+          placeholder='Select a status'
+          options={[
+            { value: 'DRAFT', label: 'Draft' },
+            { value: 'PUBLISHED', label: 'Published' },
+            { value: 'PENDING', label: 'Pending' },
+          ]}
+        />
         <FieldError actionState={actionState} name='status' />
       </div>
 

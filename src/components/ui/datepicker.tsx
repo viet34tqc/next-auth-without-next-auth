@@ -17,7 +17,7 @@ interface DatePickerProps {
 }
 
 export function DatePicker({ name, defaultValue, onChange, className }: DatePickerProps) {
-  const [date, setDate] = useState<Date | undefined>(() => defaultValue || new Date())
+  const [date, setDate] = useState<Date | undefined>(defaultValue)
   const [open, setOpen] = useState(false)
 
   // Update internal state when defaultValue changes
