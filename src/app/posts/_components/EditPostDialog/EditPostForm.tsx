@@ -74,13 +74,7 @@ export function EditPostForm({ post, onSuccess }: { post: Post; onSuccess: () =>
         <DatePicker
           name='featuredAt'
           className='w-full'
-          defaultValue={
-            post.featuredAt instanceof Date
-              ? post.featuredAt
-              : post.featuredAt
-                ? new Date(post.featuredAt)
-                : new Date()
-          }
+          defaultValue={post.featuredAt instanceof Date ? post.featuredAt : undefined}
         />
         <FieldError actionState={actionState} name='featuredAt' />
       </div>
