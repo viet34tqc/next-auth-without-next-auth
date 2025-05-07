@@ -1,4 +1,4 @@
-import CookieToastWrapper from '@/components/CookieToast/Wrapper'
+import CookieToastWrapper from '@/components/form/CookieToast/Wrapper'
 import Header from '@/components/layout/Header'
 import ThemeProvider from '@/components/theme/ThemeProvider'
 import { Toaster } from '@/components/ui/sonner'

@@ -1,7 +1,7 @@
 'use client'
 
 import useActionFeedback from '@/app/hooks/useActionFeedback'
-import { FieldError } from '@/components/FieldError'
+import { FieldError } from '@/components/form/FieldError'
 import { DatePicker } from '@/components/ui/datepicker'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
