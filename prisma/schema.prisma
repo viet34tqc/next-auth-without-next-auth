@@ -10,12 +10,13 @@ datasource db {
 }
 
 model Post {
-  id        String   @id @default(cuid())
-  title     String
-  content   String
-  status    POST_STATUS @default(DRAFT)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id         String      @id @default(cuid())
+  title      String
+  content    String
+  status     POST_STATUS @default(DRAFT)
+  createdAt  DateTime    @default(now())
+  updatedAt  DateTime    @updatedAt
+  featuredAt DateTime?
 }
 
 model User {

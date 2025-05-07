@@ -19,6 +19,7 @@ const postSchema = z.object({
     required_error: 'Status is required',
     invalid_type_error: 'Status must be DRAFT, PUBLISHED, or PENDING',
   }),
+  featuredAt: z.string().optional().nullable(),
 })
 
 export type PostFormValues = z.infer<typeof postSchema>
@@ -34,6 +35,8 @@ export async function createPost(formState: ActionState, formData: FormData) {
         title: data.title,
         content: data.content,
         status: data.status as PostStatus,
+        featuredAt:
+          data.featuredAt && data.featuredAt.trim() !== '' ? new Date(data.featuredAt) : null,
       },
     })
 

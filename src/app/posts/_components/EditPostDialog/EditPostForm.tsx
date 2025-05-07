@@ -2,6 +2,7 @@
 
 import useActionFeedback from '@/app/hooks/useActionFeedback'
 import { FieldError } from '@/components/FieldError'
+import { DatePicker } from '@/components/ui/datepicker'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import {
@@ -80,6 +81,22 @@ export function EditPostForm({ post, onSuccess }: { post: Post; onSuccess: () =>
           </SelectContent>
         </Select>
         <FieldError actionState={actionState} name='status' />
+      </div>
+
+      <div className='space-y-2 relative'>
+        <Label htmlFor='featuredAt'>Featured Date</Label>
+        <DatePicker
+          name='featuredAt'
+          className='w-full'
+          defaultValue={
+            post.featuredAt instanceof Date
+              ? post.featuredAt
+              : post.featuredAt
+                ? new Date(post.featuredAt)
+                : new Date()
+          }
+        />
+        <FieldError actionState={actionState} name='featuredAt' />
       </div>
 
       {actionState.status === 'ERROR' && actionState.message && (

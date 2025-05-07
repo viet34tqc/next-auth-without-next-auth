@@ -25,15 +25,12 @@ export const signIn = async (formState: ActionState, formData: FormData) => {
       },
     })
     if (!user) {
-      // https://www.robinwieruch.de/next-forms/
       throw new Error('Incorrect email or password')
     }
 
-    // Validate password
     const validPassword = await verifyHashPassword(user.passwordHash, data.password as string)
 
     if (!validPassword) {
-      // https://www.robinwieruch.de/next-forms/
       throw new Error('Incorrect email or password')
     }
 

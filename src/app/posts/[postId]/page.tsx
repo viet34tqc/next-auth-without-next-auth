@@ -1,6 +1,7 @@
 import Placeholder from '@/components/layout/Placeholder'
 import { Separator } from '@/components/ui/separator'
-import { Calendar, Clock } from 'lucide-react'
+import { format } from 'date-fns'
+import { Calendar, Clock, Star } from 'lucide-react'
 import { Metadata } from 'next'
 import { getPost } from '../_apis/getPost'
 import { DeletePostButton } from '../_components/DeletePostButton'
@@ -30,13 +31,17 @@ const PostDetail = async ({ params }: { params: Promise<{ postId: string }> }) =
     return <Placeholder text='Post not found' />
   }
 
+  const formattedFeaturedDate = post.featuredAt
+    ? format(new Date(post.featuredAt), 'MMMM d, yyyy')
+    : null
+
   return (
     <article className='space-y-4 max-w-5xl mx-auto'>
       <header>
         <div className='flex flex-wrap gap-2 justify-between items-center'>
           <div className='space-y-2'>
             <h1>{post.title}</h1>
-            <span className='flex items-center gap-2 text-muted-foreground'>
+            <span className='flex items-center gap-2 text-muted-foreground flex-wrap'>
               <time
                 dateTime={post.createdAt.toLocaleDateString()}
                 className='flex items-center gap-1'
@@ -53,6 +58,15 @@ const PostDetail = async ({ params }: { params: Promise<{ postId: string }> }) =
                   <Clock className='h-3 w-3' />
                   Updated: {post.updatedAt.toLocaleDateString()}
                 </time>
+              )}
+              {formattedFeaturedDate && (
+                <>
+                  <Separator orientation='vertical' className='!h-4' />
+                  <span className='flex items-center gap-1'>
+                    <Star className='h-3 w-3 text-amber-500' />
+                    Featured: {formattedFeaturedDate}
+                  </span>
+                </>
               )}
             </span>
           </div>
