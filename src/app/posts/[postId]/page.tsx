@@ -1,8 +1,9 @@
 import Placeholder from '@/components/layout/Placeholder'
 import { Separator } from '@/components/ui/separator'
 import { format } from 'date-fns'
-import { Calendar, Clock, Star } from 'lucide-react'
+import { ArrowLeft, Calendar, Clock, Star } from 'lucide-react'
 import { Metadata } from 'next'
+import Link from 'next/link'
 import { getPost } from '../_apis/getPost'
 import { DeletePostButton } from '../_components/DeletePostButton'
 import { EditPostButton } from '../_components/EditPostDialog'
@@ -36,10 +37,14 @@ const PostDetail = async ({ params }: { params: Promise<{ postId: string }> }) =
     : null
 
   return (
-    <article className='space-y-4 max-w-5xl mx-auto'>
+    <article className='space-y-6 max-w-5xl mx-auto'>
+      <Link className='flex gap-1 items-center' href='/posts'>
+        <ArrowLeft className='h-4 w-4' />
+        Back
+      </Link>
       <header>
         <div className='flex flex-wrap gap-2 justify-between items-center'>
-          <div className='space-y-2'>
+          <div className='space-y-3'>
             <h1>{post.title}</h1>
             <span className='flex items-center gap-2 text-muted-foreground flex-wrap'>
               <time
