@@ -21,7 +21,6 @@ export const getUserFromGitHubId = async (githubId: number) => {
     id: row.id,
     email: row.email,
     githubId: row.githubId,
-    firstName: row.firstName,
-    lastName: row.lastName,
+    username: row.username,
   }
 }

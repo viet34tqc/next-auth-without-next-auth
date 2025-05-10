@@ -19,8 +19,7 @@ const signUp = async (formData: FormData) => {
     // Create user
     const user = await prisma.user.create({
       data: {
-        firstName: formDataRaw.firstName as string,
-        lastName: formDataRaw.lastName as string,
+        username: formDataRaw.username as string,
         email: formDataRaw.email as string,
         passwordHash,
       },

@@ -46,7 +46,7 @@ export async function GET(request: Request): Promise<Response> {
   if (existingUser !== null) {
     const sessionToken = generateRandomSessionToken()
     const session = await createSession(sessionToken, existingUser.id)
-    await setSessionCookie(sessionToken, session.expiresAt)
+    setSessionCookie(sessionToken, session.expiresAt)
     return new Response(null, {
       status: 302,
       headers: {
@@ -113,8 +113,7 @@ export async function GET(request: Request): Promise<Response> {
   const user = await prisma.user.create({
     data: {
       githubId: githubUserId,
-      firstName: githubUsername,
-      lastName: githubUsername,
+      userName: githubUsername,
       email,
       passwordHash: '',
     },

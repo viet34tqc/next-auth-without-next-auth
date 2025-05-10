@@ -13,7 +13,7 @@ CREATE TABLE "Post" (
 CREATE TABLE "User" (
     "id" TEXT NOT NULL PRIMARY KEY,
     "githubId" INTEGER,
-    "firstName" TEXT NOT NULL,
+    "userName" TEXT NOT NULL,
     "lastName" TEXT NOT NULL,
     "email" TEXT NOT NULL,
     "passwordHash" TEXT NOT NULL

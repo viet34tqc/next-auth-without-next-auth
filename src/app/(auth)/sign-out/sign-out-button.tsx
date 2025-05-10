@@ -1,9 +1,12 @@
+import { Button } from '@/components/ui/button'
 import { signOut } from './_actions/sign-out'
 
 const SignOutButton = () => {
   return (
     <form action={signOut}>
-      <button type='submit'>Sign Out</button>
+      <Button variant='ghost' type='submit'>
+        Sign Out
+      </Button>
     </form>
   )
 }

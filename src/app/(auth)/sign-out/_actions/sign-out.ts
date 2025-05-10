@@ -13,5 +13,5 @@ export const signOut = async () => {
   await invalidateSession(session.id)
   await deleteSessionCookie()
 
-  redirect('/login')
+  redirect('/')
 }
