@@ -21,22 +21,22 @@ const SubmitButton = ({ label, loading }: SubmitButtonProps) => {
 }
 
 const SignInPage = () => {
-  const [formState, action] = useActionState(signIn, EMPTY_FORM_STATE)
+  const [actionState, action] = useActionState(signIn, EMPTY_FORM_STATE)
   return (
     <>
       <form action={action} className='p-4 flex flex-col gap-y-2'>
         <div>
           <input name='email' type='email' placeholder='Email' className='border' />
-          <FieldError formState={formState} name='email' />
+          <FieldError actionState={actionState} name='email' />
         </div>
         <div>
           <input name='password' type='password' placeholder='Password' className='border' />
-          <FieldError formState={formState} name='password' />
+          <FieldError actionState={actionState} name='password' />
         </div>
 
         <SubmitButton label='Sign in' loading='Signing in...' />
 
-        <span className='font-bold'>{formState.message}</span>
+        <span className='font-bold'>{actionState.message}</span>
       </form>
       <div>
         <Link href='/login/github'>Sign in with GitHub</Link>

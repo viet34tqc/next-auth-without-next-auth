@@ -113,7 +113,7 @@ export async function GET(request: Request): Promise<Response> {
   const user = await prisma.user.create({
     data: {
       githubId: githubUserId,
-      userName: githubUsername,
+      username: githubUsername,
       email,
       passwordHash: '',
     },
