@@ -1,11 +1,62 @@
-import SignUpForm from './_components/sign-up-form'
+'use client'
+
+import { SubmitButton } from '@/app/posts/_components/SubmitButton'
+import { FieldError } from '@/components/form/FieldError'
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
+import { EMPTY_FORM_STATE } from '@/lib/constants'
+import { useActionState } from 'react'
+import signUp from './_actions/sign-up'
 
 const SignUpPage = () => {
+  const [actionState, action] = useActionState(signUp, EMPTY_FORM_STATE)
+
   return (
-    <>
-      <h2>Sign Up Page</h2>
-      <SignUpForm />
-    </>
+    <Card className='mx-auto mt-24 max-w-96 animate-in fade-in-10 slide-in-from-top-10 duration-600'>
+      <CardHeader>
+        <CardTitle>Sign Up</CardTitle>
+        <CardDescription>Sign up for an account</CardDescription>
+      </CardHeader>
+      <CardContent>
+        <form action={action} className='flex flex-col gap-y-6'>
+          <div className='space-y-2'>
+            <Label htmlFor='username'>Username</Label>
+            <Input id='username' name='username' type='text' placeholder='Username' />
+            <FieldError actionState={actionState} name='username' />
+          </div>
+
+          <div className='space-y-2'>
+            <Label htmlFor='email'>Email</Label>
+            <Input id='email' name='email' type='email' placeholder='Email' />
+            <FieldError actionState={actionState} name='email' />
+          </div>
+
+          <div className='space-y-2'>
+            <Label htmlFor='password'>Password</Label>
+            <Input id='password' name='password' type='password' placeholder='Password' />
+            <FieldError actionState={actionState} name='password' />
+          </div>
+
+          <div className='space-y-2'>
+            <Label htmlFor='confirmPassword'>Confirm Password</Label>
+            <Input
+              id='confirmPassword'
+              name='confirmPassword'
+              type='password'
+              placeholder='Confirm Password'
+            />
+            <FieldError actionState={actionState} name='confirmPassword' />
+          </div>
+
+          {actionState.status === 'ERROR' && actionState.message && (
+            <p className='text-destructive text-sm font-medium'>{actionState.message}</p>
+          )}
+
+          <SubmitButton label='Sign Up' loading='Signing up...' />
+        </form>
+      </CardContent>
+    </Card>
   )
 }
 

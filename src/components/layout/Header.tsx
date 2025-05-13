@@ -12,13 +12,16 @@ const Header = async () => {
       <Link href='/' className='flex items-center gap-2 mr-auto'>
         <Newspaper size='14' /> NewsPaper
       </Link>
-      <ThemeSwitcher />
       <Link href='/dashboard'>Dashboard</Link>
       <SignOutButton />
     </>
   )
   const authNav = (
     <>
+      <Link href='/' className='flex items-center gap-2 mr-auto'>
+        <Newspaper size='14' /> NewsPaper
+      </Link>
+      <ThemeSwitcher />
       <Link href={PATHS.signUp()}>Sign Up</Link>
       <Link href={PATHS.signIn()}>Sign In</Link>
     </>

@@ -1,3 +1,4 @@
+import { Prisma } from '@prisma/client'
 import { clsx, type ClassValue } from 'clsx'
 import { twMerge } from 'tailwind-merge'
 import { ZodError } from 'zod'
@@ -10,6 +11,17 @@ export const fromErrorfromMessageToFormState = (error: unknown) => {
       status: 'ERROR' as const,
       message: '',
       fieldErrors: error.flatten().fieldErrors,
+      timestamp: Date.now(),
+    }
+  } else if (error instanceof Prisma.PrismaClientKnownRequestError) {
+    let message = 'Database error'
+    if (error.code === 'P2002') {
+      message = 'Email existed'
+    }
+    return {
+      status: 'ERROR' as const,
+      message,
+      fieldErrors: {},
       timestamp: Date.now(),
     }
   } else if (error instanceof Error) {

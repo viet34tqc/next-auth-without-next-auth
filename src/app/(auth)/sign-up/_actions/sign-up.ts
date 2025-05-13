@@ -4,23 +4,40 @@ import { setSessionCookie } from '@/lib/auth/cookie'
 import { hashPassword } from '@/lib/auth/password'
 import { createSession, generateRandomSessionToken } from '@/lib/auth/session'
 import { prisma } from '@/lib/prisma'
+import { ActionState } from '@/lib/types'
+import { fromErrorfromMessageToFormState } from '@/lib/utils'
 import { redirect } from 'next/navigation'
+import { z } from 'zod'
 
-const signUp = async (formData: FormData) => {
-  const formDataRaw = Object.fromEntries(formData.entries())
+const signUpSchema = z
+  .object({
+    username: z.string(),
+    email: z
+      .string()
+      .min(1, { message: 'Email is required' })
+      .email({ message: 'Please enter a valid email address' }),
+    password: z.string().min(1, { message: 'Password is required' }),
+    confirmPassword: z.string().min(1, { message: 'Please confirm your password' }),
+  })
+  .refine((data) => data.password === data.confirmPassword, {
+    message: 'Passwords do not match',
+    path: ['confirmPassword'],
+  })
 
-  if (formDataRaw.password !== formDataRaw.confirmPassword) {
-    throw new Error('Passwords do not match')
-  }
+export type SignUpFormValues = z.infer<typeof signUpSchema>
 
+export const signUp = async (formState: ActionState, formData: FormData) => {
   try {
-    const passwordHash = await hashPassword(formDataRaw.password as string)
+    const formDataRaw = Object.fromEntries(formData.entries())
+    const data = signUpSchema.parse(formDataRaw)
+
+    const passwordHash = await hashPassword(data.password)
 
     // Create user
     const user = await prisma.user.create({
       data: {
-        username: formDataRaw.username as string,
-        email: formDataRaw.email as string,
+        username: data.username,
+        email: data.email,
         passwordHash,
       },
     })
@@ -32,9 +49,9 @@ const signUp = async (formData: FormData) => {
     // After create user and session, set cookie
     await setSessionCookie(sessionToken, session.expiresAt)
   } catch (error) {
-    console.log('error', error)
-    redirect('/dashboard')
+    return fromErrorfromMessageToFormState(error)
   }
+  redirect('/dashboard')
 }
 
 export default signUp
