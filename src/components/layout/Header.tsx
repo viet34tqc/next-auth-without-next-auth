@@ -1,5 +1,6 @@
 import SignOutButton from '@/app/(auth)/sign-out/sign-out-button'
 import { getAuth } from '@/lib/auth/cookie'
+import { PATHS } from '@/path'
 import { Newspaper } from 'lucide-react'
 import Link from 'next/link'
 import ThemeSwitcher from '../theme/ThemeSwitcher'
@@ -18,8 +19,8 @@ const Header = async () => {
   )
   const authNav = (
     <>
-      <Link href='/sign-up'>Sign Up</Link>
-      <Link href='/login'>Sign In</Link>
+      <Link href={PATHS.signUp()}>Sign Up</Link>
+      <Link href={PATHS.signIn()}>Sign In</Link>
     </>
   )
 

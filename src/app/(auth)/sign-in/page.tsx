@@ -2,6 +2,7 @@
 
 import { FieldError } from '@/components/form/FieldError'
 import { EMPTY_FORM_STATE } from '@/lib/constants'
+import { PATHS } from '@/path'
 import Link from 'next/link'
 import { useActionState } from 'react'
 import { useFormStatus } from 'react-dom'
@@ -39,7 +40,7 @@ const SignInPage = () => {
         <span className='font-bold'>{actionState.message}</span>
       </form>
       <div>
-        <Link href='/login/github'>Sign in with GitHub</Link>
+        <Link href={PATHS.signInGithub()}>Sign in with GitHub</Link>
       </div>
     </>
   )

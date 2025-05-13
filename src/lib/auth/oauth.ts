@@ -4,7 +4,7 @@ import { prisma } from '../prisma'
 export const github = new GitHub(
   process.env.GITHUB_CLIENT_ID ?? '',
   process.env.GITHUB_CLIENT_SECRET ?? '',
-  'http://localhost:3000/login/github/callback',
+  'http://localhost:3000/sign-in/github/callback',
 )
 
 export const getUserFromGitHubId = async (githubId: number) => {
