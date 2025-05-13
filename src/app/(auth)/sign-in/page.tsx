@@ -1,48 +1,53 @@
 'use client'
 
+import { SubmitButton } from '@/app/posts/_components/SubmitButton'
 import { FieldError } from '@/components/form/FieldError'
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
 import { EMPTY_FORM_STATE } from '@/lib/constants'
 import { PATHS } from '@/path'
 import Link from 'next/link'
 import { useActionState } from 'react'
-import { useFormStatus } from 'react-dom'
 import { signIn } from './_actions/signIn'
-type SubmitButtonProps = {
-  label: string
-  loading: React.ReactNode
-}
-const SubmitButton = ({ label, loading }: SubmitButtonProps) => {
-  const { pending } = useFormStatus()
-
-  return (
-    <button disabled={pending} type='submit' className='border-2'>
-      {pending ? loading : label}
-    </button>
-  )
-}
 
 const SignInPage = () => {
   const [actionState, action] = useActionState(signIn, EMPTY_FORM_STATE)
+
   return (
-    <>
-      <form action={action} className='p-4 flex flex-col gap-y-2'>
-        <div>
-          <input name='email' type='email' placeholder='Email' className='border' />
-          <FieldError actionState={actionState} name='email' />
-        </div>
-        <div>
-          <input name='password' type='password' placeholder='Password' className='border' />
-          <FieldError actionState={actionState} name='password' />
-        </div>
+    <Card className='mx-auto mt-24 max-w-96 animate-in fade-in-10 slide-in-from-top-10 duration-600'>
+      <CardHeader>
+        <CardTitle>Sign In</CardTitle>
+        <CardDescription>Sign in to your account</CardDescription>
+      </CardHeader>
+      <CardContent>
+        <form action={action} className='flex flex-col gap-y-6'>
+          <div className='space-y-2'>
+            <Label htmlFor='email'>Email</Label>
+            <Input id='email' name='email' type='email' placeholder='Email' />
+            <FieldError actionState={actionState} name='email' />
+          </div>
 
-        <SubmitButton label='Sign in' loading='Signing in...' />
+          <div className='space-y-2'>
+            <Label htmlFor='password'>Password</Label>
+            <Input id='password' name='password' type='password' placeholder='Password' />
+            <FieldError actionState={actionState} name='password' />
+          </div>
 
-        <span className='font-bold'>{actionState.message}</span>
-      </form>
-      <div>
-        <Link href={PATHS.signInGithub()}>Sign in with GitHub</Link>
-      </div>
-    </>
+          {actionState.status === 'ERROR' && actionState.message && (
+            <p className='text-destructive text-sm font-medium'>{actionState.message}</p>
+          )}
+
+          <SubmitButton label='Sign In' loading='Signing in...' />
+
+          <div className='flex justify-center'>
+            <Link href={PATHS.signInGithub()} className='text-sm text-primary hover:underline'>
+              Sign in with GitHub
+            </Link>
+          </div>
+        </form>
+      </CardContent>
+    </Card>
   )
 }
 

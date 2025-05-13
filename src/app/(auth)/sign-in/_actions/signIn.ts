@@ -5,12 +5,13 @@ import { verifyHashPassword } from '@/lib/auth/password'
 import { createSession, generateRandomSessionToken } from '@/lib/auth/session'
 import { prisma } from '@/lib/prisma'
 import { ActionState } from '@/lib/types'
-import { fromErrorfromMessageToFormState, fromMessageToFormState } from '@/lib/utils'
+import { fromErrorfromMessageToFormState } from '@/lib/utils'
+import { redirect } from 'next/navigation'
 import { z } from 'zod'
 
 const signInSchema = z.object({
-  email: z.string().min(1),
-  password: z.string().min(1),
+  email: z.string().min(1, { message: 'Email is required' }),
+  password: z.string().min(1, { message: 'Password is required' }),
 })
 
 export const signIn = async (formState: ActionState, formData: FormData) => {
@@ -38,8 +39,8 @@ export const signIn = async (formState: ActionState, formData: FormData) => {
     const session = await createSession(sessionToken, user.id)
 
     await setSessionCookie(sessionToken, session.expiresAt)
-    return fromMessageToFormState('SUCCESS', 'Signed in successfully')
   } catch (error) {
     return fromErrorfromMessageToFormState(error)
   }
+  redirect('/dashboard')
 }
