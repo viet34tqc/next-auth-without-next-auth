@@ -29,7 +29,7 @@ const Header = async () => {
 
   return (
     <header>
-      <nav className='py-5 border-b'>
+      <nav className='py-4 border-b'>
         <div className='container flex justify-between items-center gap-4'>
           {user ? appNav : authNav}
         </div>

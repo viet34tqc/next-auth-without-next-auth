@@ -29,6 +29,10 @@ export const signIn = async (formState: ActionState, formData: FormData) => {
       throw new Error('Incorrect email or password')
     }
 
+    if (user && !user.passwordHash) {
+      throw new Error('This user has sign in with another method')
+    }
+
     const validPassword = await verifyHashPassword(user.passwordHash, data.password as string)
 
     if (!validPassword) {

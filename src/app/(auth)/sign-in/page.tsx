@@ -1,5 +1,6 @@
 'use client'
 
+import useActionFeedback from '@/app/hooks/useActionFeedback'
 import { SubmitButton } from '@/app/posts/_components/SubmitButton'
 import { FieldError } from '@/components/form/FieldError'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
@@ -9,10 +10,24 @@ import { EMPTY_FORM_STATE } from '@/lib/constants'
 import { PATHS } from '@/path'
 import Link from 'next/link'
 import { useActionState } from 'react'
+import { toast } from 'sonner'
 import { signIn } from './_actions/signIn'
 
 const SignInPage = () => {
   const [actionState, action] = useActionState(signIn, EMPTY_FORM_STATE)
+
+  useActionFeedback(actionState, {
+    onSuccess: () => {
+      if (actionState.message) {
+        toast.success(actionState.message)
+      }
+    },
+    onError: () => {
+      if (actionState.message) {
+        toast.error(actionState.message)
+      }
+    },
+  })
 
   return (
     <Card className='mx-auto mt-24 max-w-96 animate-in fade-in-10 slide-in-from-top-10 duration-600'>
@@ -34,15 +49,14 @@ const SignInPage = () => {
             <FieldError actionState={actionState} name='password' />
           </div>
 
-          {actionState.status === 'ERROR' && actionState.message && (
-            <p className='text-destructive text-sm font-medium'>{actionState.message}</p>
-          )}
-
           <SubmitButton label='Sign In' loading='Signing in...' />
 
-          <div className='flex justify-center'>
-            <Link href={PATHS.signInGithub()} className='text-sm text-primary hover:underline'>
+          <div className='flex justify-between items-center text-sm'>
+            <Link href={PATHS.signInGithub()} className=' text-primary '>
               Sign in with GitHub
+            </Link>
+            <Link href={PATHS.signUp()} className='hover:underline'>
+              No account yet?
             </Link>
           </div>
         </form>

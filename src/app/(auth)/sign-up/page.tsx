@@ -1,16 +1,32 @@
 'use client'
 
+import useActionFeedback from '@/app/hooks/useActionFeedback'
 import { SubmitButton } from '@/app/posts/_components/SubmitButton'
 import { FieldError } from '@/components/form/FieldError'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { EMPTY_FORM_STATE } from '@/lib/constants'
+import Link from 'next/link'
 import { useActionState } from 'react'
+import { toast } from 'sonner'
 import signUp from './_actions/sign-up'
 
 const SignUpPage = () => {
   const [actionState, action] = useActionState(signUp, EMPTY_FORM_STATE)
+
+  useActionFeedback(actionState, {
+    onSuccess: () => {
+      if (actionState.message) {
+        toast.success(actionState.message)
+      }
+    },
+    onError: () => {
+      if (actionState.message) {
+        toast.error(actionState.message)
+      }
+    },
+  })
 
   return (
     <Card className='mx-auto mt-24 max-w-96 animate-in fade-in-10 slide-in-from-top-10 duration-600'>
@@ -49,11 +65,10 @@ const SignUpPage = () => {
             <FieldError actionState={actionState} name='confirmPassword' />
           </div>
 
-          {actionState.status === 'ERROR' && actionState.message && (
-            <p className='text-destructive text-sm font-medium'>{actionState.message}</p>
-          )}
-
           <SubmitButton label='Sign Up' loading='Signing up...' />
+          <Link className='text-sm text-center hover:underline' href='/sign-in'>
+            Got an account? Sign in
+          </Link>
         </form>
       </CardContent>
     </Card>
