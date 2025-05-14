@@ -1,6 +1,6 @@
 'use client'
 
-import useActionFeedback from '@/app/hooks/useActionFeedback'
+import useToastActionFeedback from '@/app/hooks/useToastActionFeedback'
 import { FieldError } from '@/components/form/FieldError'
 import { DatePicker } from '@/components/ui/datepicker'
 import { Input } from '@/components/ui/input'
@@ -10,7 +10,6 @@ import { Textarea } from '@/components/ui/textarea'
 import { EMPTY_FORM_STATE } from '@/lib/constants'
 import { Post } from '@prisma/client'
 import { useActionState } from 'react'
-import { toast } from 'sonner'
 import { updatePost } from '../../_actions/updatePost'
 import { SubmitButton } from '../SubmitButton'
 
@@ -20,18 +19,8 @@ export function EditPostForm({ post, onSuccess }: { post: Post; onSuccess: () =>
       updatePost(post.id, actionState, formData),
     EMPTY_FORM_STATE,
   )
-  useActionFeedback(actionState, {
-    onSuccess: () => {
-      if (actionState.message) {
-        toast.success(actionState.message)
-      }
-      onSuccess()
-    },
-    onError: () => {
-      if (actionState.message) {
-        toast.error(actionState.message)
-      }
-    },
+  useToastActionFeedback(actionState, {
+    onSuccessCallback: () => onSuccess(),
   })
 
   return (

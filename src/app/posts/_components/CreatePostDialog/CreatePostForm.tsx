@@ -1,6 +1,6 @@
 'use client'
 
-import useActionFeedback from '@/app/hooks/useActionFeedback'
+import useToastActionFeedback from '@/app/hooks/useToastActionFeedback'
 import { FieldError } from '@/components/form/FieldError'
 import { DatePicker } from '@/components/ui/datepicker'
 import { Input } from '@/components/ui/input'
@@ -9,25 +9,14 @@ import { SelectWithHiddenInput } from '@/components/ui/select-with-hidden-input'
 import { Textarea } from '@/components/ui/textarea'
 import { EMPTY_FORM_STATE } from '@/lib/constants'
 import { useActionState } from 'react'
-import { toast } from 'sonner'
 import { createPost } from '../../_actions/createPost'
 import { SubmitButton } from '../SubmitButton'
 
 export function CreatePostForm({ onSuccess }: { onSuccess: () => void }) {
   const [actionState, action] = useActionState(createPost, EMPTY_FORM_STATE)
 
-  useActionFeedback(actionState, {
-    onSuccess: () => {
-      if (actionState.message) {
-        toast.success(actionState.message)
-      }
-      onSuccess()
-    },
-    onError: () => {
-      if (actionState.message) {
-        toast.error(actionState.message)
-      }
-    },
+  useToastActionFeedback(actionState, {
+    onSuccessCallback: () => onSuccess(),
   })
 
   return (

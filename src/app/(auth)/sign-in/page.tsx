@@ -1,6 +1,6 @@
 'use client'
 
-import useActionFeedback from '@/app/hooks/useActionFeedback'
+import useToastActionFeedback from '@/app/hooks/useToastActionFeedback'
 import { SubmitButton } from '@/app/posts/_components/SubmitButton'
 import { FieldError } from '@/components/form/FieldError'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
@@ -10,24 +10,12 @@ import { EMPTY_FORM_STATE } from '@/lib/constants'
 import { PATHS } from '@/path'
 import Link from 'next/link'
 import { useActionState } from 'react'
-import { toast } from 'sonner'
 import { signIn } from './_actions/signIn'
 
 const SignInPage = () => {
   const [actionState, action] = useActionState(signIn, EMPTY_FORM_STATE)
 
-  useActionFeedback(actionState, {
-    onSuccess: () => {
-      if (actionState.message) {
-        toast.success(actionState.message)
-      }
-    },
-    onError: () => {
-      if (actionState.message) {
-        toast.error(actionState.message)
-      }
-    },
-  })
+  useToastActionFeedback(actionState)
 
   return (
     <Card className='mx-auto mt-24 max-w-96 animate-in fade-in-10 slide-in-from-top-10 duration-600'>
