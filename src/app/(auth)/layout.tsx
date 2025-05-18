@@ -6,9 +6,9 @@ const AuthLayout = async ({
 }: Readonly<{
   children: React.ReactNode
 }>) => {
-  const { user } = await getAuth()
+  const { session } = await getAuth()
 
-  if (user) {
+  if (session) {
     redirect('/dashboard')
   }
 
