@@ -1,4 +1,5 @@
 import { getAuth } from '@/lib/auth/cookie'
+import { PATHS } from '@/path'
 import { redirect } from 'next/navigation'
 
 const AuthenticatedLayout = async ({
@@ -9,7 +10,7 @@ const AuthenticatedLayout = async ({
   const { session } = await getAuth()
 
   if (!session) {
-    redirect('/login')
+    redirect(PATHS.signIn())
   }
 
   return <>{children}</>

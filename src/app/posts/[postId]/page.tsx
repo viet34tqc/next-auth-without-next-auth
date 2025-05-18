@@ -1,5 +1,6 @@
 import Placeholder from '@/components/layout/Placeholder'
 import { Separator } from '@/components/ui/separator'
+import { getAuth } from '@/lib/auth/cookie'
 import { format } from 'date-fns'
 import { ArrowLeft, Calendar, Clock, Star } from 'lucide-react'
 import { Metadata } from 'next'
@@ -27,6 +28,9 @@ export async function generateMetadata({
 const PostDetail = async ({ params }: { params: Promise<{ postId: string }> }) => {
   const { postId } = await params
   const post = await getPost(postId)
+  const { session } = await getAuth()
+
+  const isOwner = session && post?.userId === session.userId
 
   if (post === null) {
     return <Placeholder text='Post not found' />
@@ -38,9 +42,9 @@ const PostDetail = async ({ params }: { params: Promise<{ postId: string }> }) =
 
   return (
     <article className='space-y-6 max-w-5xl mx-auto'>
-      <Link className='flex gap-1 items-center' href='/posts'>
+      <Link className='flex gap-1 items-center' href='/'>
         <ArrowLeft className='h-4 w-4' />
-        Back
+        Back to Home
       </Link>
       <header>
         <div className='flex flex-wrap gap-2 justify-between items-center'>
@@ -77,10 +81,12 @@ const PostDetail = async ({ params }: { params: Promise<{ postId: string }> }) =
             </span>
           </div>
 
-          <div className='flex gap-2'>
-            <EditPostButton post={post} />
-            <DeletePostButton id={postId} />
-          </div>
+          {isOwner && (
+            <div className='flex gap-2'>
+              <EditPostButton post={post} />
+              <DeletePostButton id={postId} />
+            </div>
+          )}
         </div>
       </header>
 

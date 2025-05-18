@@ -12,7 +12,7 @@ const Header = async () => {
       <Link href='/' className='flex items-center gap-2 mr-auto'>
         <Newspaper size='14' /> NewsPaper
       </Link>
-      <Link href='/dashboard'>Dashboard</Link>
+      <Link href={PATHS.dashboard()}>Dashboard</Link>
       <SignOutButton />
     </>
   )

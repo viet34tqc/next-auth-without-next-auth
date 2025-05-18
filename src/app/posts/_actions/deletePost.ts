@@ -39,7 +39,8 @@ export const deletePost = async (id: string): Promise<ActionState> => {
       },
     })
 
-    revalidatePath(PATHS.posts())
+    revalidatePath('/')
+    revalidatePath(PATHS.dashboard())
 
     const cookieStore = await cookies()
     cookieStore.set('toast-message', 'Post deleted successfully')
@@ -47,5 +48,5 @@ export const deletePost = async (id: string): Promise<ActionState> => {
     return fromErrorfromMessageToFormState(error)
   }
 
-  redirect(PATHS.posts())
+  redirect('/')
 }

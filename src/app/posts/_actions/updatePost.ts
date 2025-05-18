@@ -66,7 +66,8 @@ export async function updatePost(id: string, formState: ActionState, formData: F
     })
 
     revalidatePath(PATHS.post(id))
-    revalidatePath(PATHS.posts())
+    revalidatePath('/')
+    revalidatePath(PATHS.dashboard())
 
     return fromMessageToFormState('SUCCESS', 'Post updated successfully')
   } catch (error) {
