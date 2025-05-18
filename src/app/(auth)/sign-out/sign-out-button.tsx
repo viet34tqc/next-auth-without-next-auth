@@ -4,7 +4,7 @@ import { signOut } from './_actions/sign-out'
 const SignOutButton = () => {
   return (
     <form action={signOut}>
-      <Button variant='ghost' type='submit'>
+      <Button variant='outline' type='submit'>
         Sign Out
       </Button>
     </form>

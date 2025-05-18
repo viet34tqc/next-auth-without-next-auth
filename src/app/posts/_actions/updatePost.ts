@@ -1,5 +1,6 @@
 'use server'
 
+import { getAuth } from '@/lib/auth/cookie'
 import { prisma } from '@/lib/prisma'
 import { ActionState } from '@/lib/types'
 import { fromErrorfromMessageToFormState, fromMessageToFormState } from '@/lib/utils'
@@ -26,8 +27,29 @@ export type PostFormValues = z.infer<typeof postSchema>
 
 export async function updatePost(id: string, formState: ActionState, formData: FormData) {
   try {
+    // Get the current user session
+    const { session } = await getAuth()
+
+    if (!session) {
+      throw new Error('You must be logged in to update a post')
+    }
+
     const formDataRaw = Object.fromEntries(formData.entries())
     const data = postSchema.parse(formDataRaw)
+
+    // Verify post ownership
+    const post = await prisma.post.findUnique({
+      where: { id },
+      select: { userId: true },
+    })
+
+    if (!post) {
+      throw new Error('Post not found')
+    }
+
+    if (post.userId !== session.userId) {
+      throw new Error('You can only edit your own posts')
+    }
 
     // Update post in database
     await prisma.post.update({

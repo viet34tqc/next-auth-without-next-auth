@@ -1,5 +1,6 @@
 'use server'
 
+import { getAuth } from '@/lib/auth/cookie'
 import { prisma } from '@/lib/prisma'
 import { ActionState } from '@/lib/types'
 import { fromErrorfromMessageToFormState, fromMessageToFormState } from '@/lib/utils'
@@ -26,10 +27,17 @@ export type PostFormValues = z.infer<typeof postSchema>
 
 export async function createPost(formState: ActionState, formData: FormData) {
   try {
+    // Get the current user session
+    const { session } = await getAuth()
+
+    if (!session) {
+      throw new Error('You must be logged in to create a post')
+    }
+
     const formDataRaw = Object.fromEntries(formData.entries())
     const data = postSchema.parse(formDataRaw)
 
-    // Create post in database
+    // Create post in database with userId
     await prisma.post.create({
       data: {
         title: data.title,
@@ -37,6 +45,7 @@ export async function createPost(formState: ActionState, formData: FormData) {
         status: data.status as PostStatus,
         featuredAt:
           data.featuredAt && data.featuredAt.trim() !== '' ? new Date(data.featuredAt) : null,
+        userId: session.userId, // Add the userId from the session
       },
     })
 

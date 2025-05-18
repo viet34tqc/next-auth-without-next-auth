@@ -17,15 +17,20 @@ model Post {
   createdAt  DateTime    @default(now())
   updatedAt  DateTime    @updatedAt
   featuredAt DateTime?
+  userId     String
+  user       User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
 }
 
 model User {
   id           String    @id @default(cuid())
   githubId     Int?
-  sessions     Session[]
   username     String
+  sessions     Session[]
   email        String    @unique
   passwordHash String
+  posts        Post[]
 }
 
 // When a user signs up or signs in, we create a session for them.
