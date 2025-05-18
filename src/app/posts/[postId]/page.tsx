@@ -44,8 +44,9 @@ const PostDetail = async ({ params }: { params: Promise<{ postId: string }> }) =
       </Link>
       <header>
         <div className='flex flex-wrap gap-2 justify-between items-center'>
-          <div className='space-y-3'>
+          <div className='space-y-3 text-sm'>
             <h1>{post.title}</h1>
+            <p className='text-muted-foreground'>by {post.user.username}</p>
             <span className='flex items-center gap-2 text-muted-foreground flex-wrap'>
               <time
                 dateTime={post.createdAt.toLocaleDateString()}

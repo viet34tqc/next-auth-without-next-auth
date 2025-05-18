@@ -2,17 +2,20 @@
 
 import { Card } from '@/components/ui/card'
 import { PATHS } from '@/path'
-import { Post } from '@prisma/client'
 import { format } from 'date-fns'
 import { Star } from 'lucide-react'
 import Link from 'next/link'
 import { POST_STATUS_ICONS } from '../_constants'
+import { PostAndUsername } from '../_types'
 
-const PostItem = ({ post }: { post: Post }) => {
-  const { id, title, content, status, featuredAt } = post
+type Props = {
+  post: PostAndUsername
+}
+
+const PostItem = ({ post }: Props) => {
+  const { id, title, content, status, featuredAt, user } = post
   const StatusIcon = POST_STATUS_ICONS[status]
 
-  // Format the featuredAt date if it exists
   const formattedFeaturedDate = featuredAt ? format(new Date(featuredAt), 'MMM d, yyyy') : null
 
   return (
@@ -21,7 +24,10 @@ const PostItem = ({ post }: { post: Post }) => {
         <div className='flex items-center justify-between'>
           <div className='flex items-center gap-2'>
             <StatusIcon className='size-4' aria-hidden={true} />
-            <h3>{title}</h3>
+            <div>
+              <h3>{title}</h3>
+              <p className='text-xs text-muted-foreground'>by {user.username}</p>
+            </div>
           </div>
           {formattedFeaturedDate && (
             <div className='flex items-center gap-1 text-xs text-muted-foreground'>
