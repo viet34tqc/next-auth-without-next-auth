@@ -1,4 +1,5 @@
 import { cookies } from 'next/headers'
+import { cache } from 'react'
 import { validateSession } from './session'
 
 export const SESSION_COOKIE_NAME = 'session'
@@ -35,7 +36,7 @@ export const deleteSessionCookie = async () => {
   ;(await cookies()).set(cookie.name, cookie.value, cookie.attributes)
 }
 
-export const getAuth = async () => {
+export const getAuth = cache(async () => {
   const sessionToken = (await cookies()).get(SESSION_COOKIE_NAME)?.value
 
   if (!sessionToken) {
@@ -43,4 +44,4 @@ export const getAuth = async () => {
   }
 
   return validateSession(sessionToken)
-}
+})

@@ -9,7 +9,6 @@ import { revalidatePath } from 'next/cache'
 import { z } from 'zod'
 import { PostStatus } from '../_types'
 
-// Zod schema for post validation
 const postSchema = z.object({
   title: z
     .string()
@@ -27,7 +26,6 @@ export type PostFormValues = z.infer<typeof postSchema>
 
 export async function updatePost(id: string, formState: ActionState, formData: FormData) {
   try {
-    // Get the current user session
     const { session } = await getAuth()
 
     if (!session) {
@@ -37,7 +35,6 @@ export async function updatePost(id: string, formState: ActionState, formData: F
     const formDataRaw = Object.fromEntries(formData.entries())
     const data = postSchema.parse(formDataRaw)
 
-    // Verify post ownership
     const post = await prisma.post.findUnique({
       where: { id },
       select: { userId: true },
@@ -46,12 +43,10 @@ export async function updatePost(id: string, formState: ActionState, formData: F
     if (!post) {
       throw new Error('Post not found')
     }
-
     if (post.userId !== session.userId) {
       throw new Error('You can only edit your own posts')
     }
 
-    // Update post in database
     await prisma.post.update({
       where: {
         id,

@@ -9,7 +9,6 @@ import { revalidatePath } from 'next/cache'
 import { z } from 'zod'
 import { PostStatus } from '../_types'
 
-// Zod schema for post validation
 const postSchema = z.object({
   title: z
     .string()
@@ -27,7 +26,6 @@ export type PostFormValues = z.infer<typeof postSchema>
 
 export async function createPost(formState: ActionState, formData: FormData) {
   try {
-    // Get the current user session
     const { session } = await getAuth()
 
     if (!session) {
@@ -37,7 +35,6 @@ export async function createPost(formState: ActionState, formData: FormData) {
     const formDataRaw = Object.fromEntries(formData.entries())
     const data = postSchema.parse(formDataRaw)
 
-    // Create post in database with userId
     await prisma.post.create({
       data: {
         title: data.title,
@@ -45,7 +42,7 @@ export async function createPost(formState: ActionState, formData: FormData) {
         status: data.status as PostStatus,
         featuredAt:
           data.featuredAt && data.featuredAt.trim() !== '' ? new Date(data.featuredAt) : null,
-        userId: session.userId, // Add the userId from the session
+        userId: session.userId,
       },
     })
 
