@@ -10,7 +10,7 @@ import { EMPTY_FORM_STATE } from '@/lib/constants'
 import { PATHS } from '@/path'
 import Link from 'next/link'
 import { useActionState } from 'react'
-import { signIn } from './_actions/signIn'
+import { signIn } from './_actions/sign-in'
 
 const SignInPage = () => {
   const [actionState, action] = useActionState(signIn, EMPTY_FORM_STATE)

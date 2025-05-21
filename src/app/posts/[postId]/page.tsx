@@ -2,9 +2,9 @@ import Placeholder from '@/components/layout/Placeholder'
 import { Separator } from '@/components/ui/separator'
 import { getAuth } from '@/lib/auth/cookie'
 import { format } from 'date-fns'
-import { ArrowLeft, Calendar, Clock, Star } from 'lucide-react'
+import { Calendar, Clock, Star } from 'lucide-react'
 import { Metadata } from 'next'
-import Link from 'next/link'
+import { BackButton } from '@/components/layout/BackButton'
 import { getPost } from '../_apis/getPost'
 import { DeletePostButton } from '../_components/DeletePostButton'
 import { EditPostButton } from '../_components/EditPostDialog'
@@ -42,10 +42,7 @@ const PostDetail = async ({ params }: { params: Promise<{ postId: string }> }) =
 
   return (
     <article className='space-y-6 max-w-5xl mx-auto'>
-      <Link className='flex gap-1 items-center' href='/'>
-        <ArrowLeft className='h-4 w-4' />
-        Back to Home
-      </Link>
+      <BackButton />
       <header>
         <div className='flex flex-wrap gap-2 justify-between items-center'>
           <div className='space-y-3 text-sm'>
@@ -59,15 +56,18 @@ const PostDetail = async ({ params }: { params: Promise<{ postId: string }> }) =
                 <Calendar className='h-3 w-3' />
                 Published: {post.createdAt.toLocaleDateString()}
               </time>
-              <Separator orientation='vertical' className='!h-4' />
+
               {post.updatedAt && post.updatedAt.getTime() !== post.createdAt.getTime() && (
-                <time
-                  dateTime={post.updatedAt.toLocaleDateString()}
-                  className='flex items-center gap-1'
-                >
-                  <Clock className='h-3 w-3' />
-                  Updated: {post.updatedAt.toLocaleDateString()}
-                </time>
+                <>
+                  <Separator orientation='vertical' className='!h-4' />
+                  <time
+                    dateTime={post.updatedAt.toLocaleDateString()}
+                    className='flex items-center gap-1'
+                  >
+                    <Clock className='h-3 w-3' />
+                    Updated: {post.updatedAt.toLocaleDateString()}
+                  </time>
+                </>
               )}
               {formattedFeaturedDate && (
                 <>

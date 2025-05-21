@@ -4,6 +4,7 @@ import { PATHS } from '@/path'
 import { Newspaper } from 'lucide-react'
 import Link from 'next/link'
 import ThemeSwitcher from '../theme/ThemeSwitcher'
+import { NavLink } from './NavLink'
 
 const Header = async () => {
   const { user } = await getAuth()
@@ -12,7 +13,8 @@ const Header = async () => {
       <Link href='/' className='flex items-center gap-2 mr-auto'>
         <Newspaper size='14' /> NewsPaper
       </Link>
-      <Link href={PATHS.dashboard()}>Dashboard</Link>
+      <ThemeSwitcher />
+      <NavLink href={PATHS.dashboard()}>Dashboard</NavLink>
       <SignOutButton />
     </>
   )
@@ -22,8 +24,8 @@ const Header = async () => {
         <Newspaper size='14' /> NewsPaper
       </Link>
       <ThemeSwitcher />
-      <Link href={PATHS.signUp()}>Sign Up</Link>
-      <Link href={PATHS.signIn()}>Sign In</Link>
+      <NavLink href={PATHS.signUp()}>Sign Up</NavLink>
+      <NavLink href={PATHS.signIn()}>Sign In</NavLink>
     </>
   )
 

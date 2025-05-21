@@ -6,6 +6,7 @@ import { createSession, generateRandomSessionToken } from '@/lib/auth/session'
 import { prisma } from '@/lib/prisma'
 import { ActionState } from '@/lib/types'
 import { fromErrorfromMessageToFormState } from '@/lib/utils'
+import { PATHS } from '@/path'
 import { redirect } from 'next/navigation'
 import { z } from 'zod'
 
@@ -46,5 +47,5 @@ export const signIn = async (formState: ActionState, formData: FormData) => {
   } catch (error) {
     return fromErrorfromMessageToFormState(error)
   }
-  redirect('/dashboard')
+  redirect(PATHS.dashboard())
 }

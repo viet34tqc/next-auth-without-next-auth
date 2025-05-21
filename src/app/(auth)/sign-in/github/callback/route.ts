@@ -4,6 +4,7 @@ import { setSessionCookie } from '@/lib/auth/cookie'
 import { getUserFromGitHubId, github } from '@/lib/auth/oauth'
 import { createSession, generateRandomSessionToken } from '@/lib/auth/session'
 import { prisma } from '@/lib/prisma'
+import { PATHS } from '@/path'
 import type { OAuth2Tokens } from 'arctic'
 
 export async function GET(request: Request): Promise<Response> {
@@ -43,6 +44,7 @@ export async function GET(request: Request): Promise<Response> {
 
   const existingUser = await getUserFromGitHubId(githubUserId)
 
+  // Check if user already exists in the DATABASE
   if (existingUser !== null) {
     const sessionToken = generateRandomSessionToken()
     const session = await createSession(sessionToken, existingUser.id)
@@ -50,11 +52,12 @@ export async function GET(request: Request): Promise<Response> {
     return new Response(null, {
       status: 302,
       headers: {
-        Location: '/',
+        Location: PATHS.dashboard(),
       },
     })
   }
 
+  // If not, get user emails
   const emailListResponse = await fetch('https://api.github.com/user/emails', {
     headers: {
       Authorization: `Bearer ${tokens.accessToken()}`,
@@ -102,7 +105,7 @@ export async function GET(request: Request): Promise<Response> {
     return new Response(null, {
       status: 302,
       headers: {
-        Location: '/',
+        Location: PATHS.dashboard(),
       },
     })
     // return new Response('An account with the same email already exists.', {
