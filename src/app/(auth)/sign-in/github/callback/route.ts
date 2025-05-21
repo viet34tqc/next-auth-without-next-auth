@@ -85,7 +85,7 @@ export async function GET(request: Request): Promise<Response> {
     })
   }
 
-  // Check existing user with the same email
+  // Check existing user in the database has the same email with github user
   const existingUserWithEmail = await prisma.user.findFirst({
     where: {
       email,
@@ -94,7 +94,7 @@ export async function GET(request: Request): Promise<Response> {
 
   if (existingUserWithEmail !== null) {
     // Update the existing user with the GitHub ID
-    await prisma.user.update({
+    const updatedUser = await prisma.user.update({
       where: {
         id: existingUserWithEmail.id,
       },
@@ -102,6 +102,12 @@ export async function GET(request: Request): Promise<Response> {
         githubId: githubUserId,
       },
     })
+
+    // Create session for the user
+    const sessionToken = generateRandomSessionToken()
+    const session = await createSession(sessionToken, updatedUser.id)
+    setSessionCookie(sessionToken, session.expiresAt)
+
     return new Response(null, {
       status: 302,
       headers: {
