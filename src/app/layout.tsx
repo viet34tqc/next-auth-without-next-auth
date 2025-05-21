@@ -1,5 +1,5 @@
 import CookieToastWrapper from '@/components/form/CookieToast/Wrapper'
-import Header from '@/components/layout/Header'
+import Header from '@/components/layout/header'
 import ThemeProvider from '@/components/theme/ThemeProvider'
 import { Toaster } from '@/components/ui/sonner'
 import type { Metadata } from 'next'

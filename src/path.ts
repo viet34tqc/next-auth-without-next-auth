@@ -6,4 +6,7 @@ export const PATHS = {
   signUp: () => '/sign-up',
   signIn: () => '/sign-in',
   signInGithub: () => '/sign-in/github',
+
+  profile: () => '/profile',
+  changePassword: () => '/change-password',
 }
