@@ -1,6 +1,6 @@
 import Placeholder from '@/components/layout/Placeholder'
+import PostItem from '@/components/posts/PostItem'
 import { getUserPosts } from '../_apis/getUserPosts'
-import PostItem from '@/app/posts/_components/PostItem'
 
 const PostList = async () => {
   const posts = await getUserPosts()

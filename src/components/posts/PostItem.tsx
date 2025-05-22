@@ -5,8 +5,8 @@ import { PATHS } from '@/path'
 import { format } from 'date-fns'
 import { Star } from 'lucide-react'
 import Link from 'next/link'
-import { POST_STATUS_ICONS } from '../_constants'
-import { PostAndUsername } from '../_types'
+import { POST_STATUS_ICONS } from './constants'
+import { PostAndUsername } from './types'
 
 type Props = {
   post: PostAndUsername

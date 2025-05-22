@@ -1,5 +1,6 @@
 'use server'
 
+import { PostStatus } from '@/components/posts/types'
 import { getAuth } from '@/lib/auth/cookie'
 import { prisma } from '@/lib/prisma'
 import { ActionState } from '@/lib/types'
@@ -7,7 +8,6 @@ import { fromErrorfromMessageToFormState, fromMessageToFormState } from '@/lib/u
 import { PATHS } from '@/path'
 import { revalidatePath } from 'next/cache'
 import { z } from 'zod'
-import { PostStatus } from '../_types'
 
 const postSchema = z.object({
   title: z
