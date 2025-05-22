@@ -8,12 +8,16 @@
 - request caching: `import { cache } from react`
 - data caching: fetch(URL, { next: {revalidate: 60} })
 
-## Action
+## Server Action
 
-Wrap the server action inside a function to handle after submitting actions like in the create post form
+Wrap the server action inside a function to handle after submitting actions like in the create post form. However, the actionState from useFormState is not updated. So, if you are using error message from actionState, don't wrap the server action inside a function.
 
 ## Routes
 
 - '/' → all posts (public)
 - '/dashboard' → user posts
 - '/posts/[id]' → detail page for each post
+
+## Search
+
+input search => change url => page get new param => getPosts(query)
