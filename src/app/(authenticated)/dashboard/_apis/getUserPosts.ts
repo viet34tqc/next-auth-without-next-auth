@@ -1,10 +1,11 @@
+import { PostAndUsername } from '@/components/posts/types'
 import { getAuth } from '@/lib/auth/cookie'
 import { prisma } from '@/lib/prisma'
-import { PostAndUsername } from '@/app/posts/_types'
 
-export const getUserPosts = async (): Promise<PostAndUsername[]> => {
+export const getUserPosts = async (query?: string): Promise<PostAndUsername[]> => {
   // Get the current user session
   const { session } = await getAuth()
+  const q = query || ''
 
   if (!session) {
     return []
@@ -13,6 +14,11 @@ export const getUserPosts = async (): Promise<PostAndUsername[]> => {
   return prisma.post.findMany({
     where: {
       userId: session.userId,
+      ...(q
+        ? {
+            OR: [{ title: { contains: q } }, { content: { contains: q } }],
+          }
+        : {}),
     },
     orderBy: {
       createdAt: 'desc',

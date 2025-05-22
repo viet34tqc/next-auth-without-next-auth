@@ -12,3 +12,7 @@ export type PostType = {
 export type PostAndUsername = Prisma.PostGetPayload<{
   include: { user: { select: { username: true } } }
 }>
+
+export type SearchParams = {
+  q: string
+}

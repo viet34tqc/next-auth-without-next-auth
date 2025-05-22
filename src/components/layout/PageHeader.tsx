@@ -9,8 +9,8 @@ type Props = {
 
 const PageHeader = ({ title, description, action }: Props) => {
   return (
-    <>
-      <header className='flex justify-between items-center'>
+    <div className='mb-8'>
+      <header className='flex justify-between items-center mb-6'>
         <div>
           <h1 className='tracking-tight'>{title}</h1>
           {description && <p className='text-muted-foreground'>{description}</p>}
@@ -19,7 +19,7 @@ const PageHeader = ({ title, description, action }: Props) => {
       </header>
 
       <Separator />
-    </>
+    </div>
   )
 }
 

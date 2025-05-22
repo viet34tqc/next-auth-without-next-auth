@@ -2,15 +2,23 @@ import Placeholder from '@/components/layout/Placeholder'
 import PostItem from '@/components/posts/PostItem'
 import { getUserPosts } from '../_apis/getUserPosts'
 
-const PostList = async () => {
-  const posts = await getUserPosts()
+interface PostListProps {
+  query: string
+}
+
+const PostList = async ({ query }: PostListProps) => {
+  const posts = await getUserPosts(query)
 
   if (!posts.length) {
-    return <Placeholder text='You have not created any posts yet' />
+    return (
+      <Placeholder
+        text={query ? `No posts found for "${query}"` : 'You have not created any posts yet'}
+      />
+    )
   }
 
   return (
-    <div className='space-y-3 animate-in fade-in-10 slide-in-from-top-10 duration-600 max-w-[30rem] mx-auto'>
+    <div className='space-y-3 animate-in fade-in-10 slide-in-from-top-10 duration-600'>
       {posts.map((post) => (
         <PostItem post={post} key={post.id} />
       ))}
