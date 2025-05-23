@@ -33,7 +33,7 @@ const SearchInput = () => {
       onChange={handleChange}
       defaultValue={searchParams.get('q')?.toString()}
       placeholder='Search posts...'
-      className='mb-5'
+      className='flex-1'
     />
   )
 }

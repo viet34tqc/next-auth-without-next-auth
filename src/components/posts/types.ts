@@ -13,6 +13,9 @@ export type PostAndUsername = Prisma.PostGetPayload<{
   include: { user: { select: { username: true } } }
 }>
 
+export type SortOption = 'newest' | 'a-z'
+
 export type SearchParams = {
-  q: string
+  q?: string
+  sort?: SortOption
 }

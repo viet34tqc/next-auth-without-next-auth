@@ -1,13 +1,15 @@
 import Placeholder from '@/components/layout/Placeholder'
 import PostItem from '@/components/posts/PostItem'
+import { SortOption } from '@/components/posts/types'
 import { getPosts } from '../_apis/getPosts'
 
 interface PostListProps {
-  query: string
+  query?: string
+  sort?: SortOption
 }
 
-const PostList = async ({ query }: PostListProps) => {
-  const posts = await getPosts(query)
+const PostList = async ({ query, sort }: PostListProps) => {
+  const posts = await getPosts(query, sort)
 
   if (!posts.length) {
     return <Placeholder text={query ? `No posts found for "${query}"` : 'There are no posts'} />

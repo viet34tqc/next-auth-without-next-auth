@@ -2,7 +2,7 @@ import { CreatePostButton } from '@/app/posts/_components/CreatePostDialog'
 import PostList from '@/app/posts/_components/PostList'
 import Loading from '@/app/posts/loading'
 import PageHeader from '@/components/layout/PageHeader'
-import SearchInput from '@/components/posts/SearchInput'
+import SearchAndSort from '@/components/posts/SearchAndSort'
 import { SearchParams } from '@/components/posts/types'
 import { getAuth } from '@/lib/auth/cookie'
 import { Suspense } from 'react'
@@ -12,7 +12,7 @@ interface HomePageProps {
 }
 
 const HomePage = async ({ searchParams }: HomePageProps) => {
-  const { q } = await searchParams
+  const { q, sort } = searchParams
   const { user } = await getAuth()
 
   return (
@@ -23,10 +23,10 @@ const HomePage = async ({ searchParams }: HomePageProps) => {
         action={user && <CreatePostButton />}
       />
       <div className='max-w-[30rem] mx-auto '>
-        <SearchInput />
+        <SearchAndSort />
 
         <Suspense fallback={<Loading />}>
-          <PostList query={q} />
+          <PostList query={q || ''} sort={sort} />
         </Suspense>
       </div>
     </>

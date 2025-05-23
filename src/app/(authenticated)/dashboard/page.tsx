@@ -1,7 +1,7 @@
 import { CreatePostButton } from '@/app/posts/_components/CreatePostDialog'
 import Loading from '@/app/posts/loading'
 import PageHeader from '@/components/layout/PageHeader'
-import SearchInput from '@/components/posts/SearchInput'
+import SearchAndSort from '@/components/posts/SearchAndSort'
 import { SearchParams } from '@/components/posts/types'
 import { Suspense } from 'react'
 import PostList from './_components/PostList'
@@ -11,17 +11,17 @@ interface DashboardPageProps {
 }
 
 const DashboardPage = async ({ searchParams }: DashboardPageProps) => {
-  const { q } = await searchParams
+  const { q, sort } = searchParams
 
   return (
     <>
       <PageHeader title='My Posts' description='Manage your posts' action={<CreatePostButton />} />
 
       <div className='max-w-[30rem] mx-auto'>
-        <SearchInput />
+        <SearchAndSort />
 
         <Suspense fallback={<Loading />}>
-          <PostList query={q} />
+          <PostList query={q || ''} sort={sort} />
         </Suspense>
       </div>
     </>

@@ -1,13 +1,15 @@
 import Placeholder from '@/components/layout/Placeholder'
 import PostItem from '@/components/posts/PostItem'
+import { SortOption } from '@/components/posts/types'
 import { getUserPosts } from '../_apis/getUserPosts'
 
 interface PostListProps {
-  query: string
+  query?: string
+  sort?: SortOption
 }
 
-const PostList = async ({ query }: PostListProps) => {
-  const posts = await getUserPosts(query)
+const PostList = async ({ query, sort }: PostListProps) => {
+  const posts = await getUserPosts(query, sort)
 
   if (!posts.length) {
     return (

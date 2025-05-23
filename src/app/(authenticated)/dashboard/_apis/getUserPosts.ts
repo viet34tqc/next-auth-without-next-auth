@@ -1,8 +1,11 @@
-import { PostAndUsername } from '@/components/posts/types'
+import { PostAndUsername, SortOption } from '@/components/posts/types'
 import { getAuth } from '@/lib/auth/cookie'
 import { prisma } from '@/lib/prisma'
 
-export const getUserPosts = async (query?: string): Promise<PostAndUsername[]> => {
+export const getUserPosts = async (
+  query?: string,
+  sort?: SortOption,
+): Promise<PostAndUsername[]> => {
   // Get the current user session
   const { session } = await getAuth()
   const q = query || ''
@@ -10,6 +13,9 @@ export const getUserPosts = async (query?: string): Promise<PostAndUsername[]> =
   if (!session) {
     return []
   }
+
+  // Define orderBy based on sort parameter
+  const orderBy = sort === 'a-z' ? { title: 'asc' as const } : { createdAt: 'desc' as const }
 
   return prisma.post.findMany({
     where: {
@@ -20,9 +26,7 @@ export const getUserPosts = async (query?: string): Promise<PostAndUsername[]> =
           }
         : {}),
     },
-    orderBy: {
-      createdAt: 'desc',
-    },
+    orderBy,
     include: {
       user: {
         select: {
