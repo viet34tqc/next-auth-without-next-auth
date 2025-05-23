@@ -1,4 +1,5 @@
 import { Prisma } from '@prisma/client'
+import { SORT_OPTIONS } from './constants'
 
 export type PostStatus = 'DRAFT' | 'PUBLISHED' | 'PENDING'
 
@@ -13,9 +14,15 @@ export type PostAndUsername = Prisma.PostGetPayload<{
   include: { user: { select: { username: true } } }
 }>
 
-export type SortOption = 'newest' | 'a-z'
-
 export type SearchParams = {
   q?: string
   sort?: SortOption
+}
+
+export type SortOption = keyof typeof SORT_OPTIONS
+
+export type SortOptionConfig = {
+  label: string
+  value: SortOption
+  orderBy: Prisma.PostOrderByWithRelationInput
 }

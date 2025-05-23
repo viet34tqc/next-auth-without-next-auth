@@ -11,7 +11,7 @@ interface DashboardPageProps {
 }
 
 const DashboardPage = async ({ searchParams }: DashboardPageProps) => {
-  const { q, sort } = searchParams
+  const { q, sort } = await searchParams
 
   return (
     <>

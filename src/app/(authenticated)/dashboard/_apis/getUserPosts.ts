@@ -1,4 +1,5 @@
-import { PostAndUsername, SortOption } from '@/components/posts/types'
+import type { PostAndUsername, SortOption } from '@/components/posts/types'
+import { getSortOrderBy } from '@/components/posts/utils'
 import { getAuth } from '@/lib/auth/cookie'
 import { prisma } from '@/lib/prisma'
 
@@ -14,8 +15,8 @@ export const getUserPosts = async (
     return []
   }
 
-  // Define orderBy based on sort parameter
-  const orderBy = sort === 'a-z' ? { title: 'asc' as const } : { createdAt: 'desc' as const }
+  // Get the orderBy object based on the sort parameter
+  const orderBy = getSortOrderBy(sort)
 
   return prisma.post.findMany({
     where: {

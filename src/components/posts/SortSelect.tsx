@@ -2,6 +2,7 @@
 
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../ui/select'
+import { SORT_OPTIONS_LIST } from './constants'
 
 const SortSelect = () => {
   const searchParams = useSearchParams()
@@ -30,8 +31,11 @@ const SortSelect = () => {
         <SelectValue placeholder='Sort by' />
       </SelectTrigger>
       <SelectContent>
-        <SelectItem value='newest'>Newest</SelectItem>
-        <SelectItem value='a-z'>A-Z</SelectItem>
+        {SORT_OPTIONS_LIST.map((option) => (
+          <SelectItem key={option.value} value={option.value}>
+            {option.label}
+          </SelectItem>
+        ))}
       </SelectContent>
     </Select>
   )

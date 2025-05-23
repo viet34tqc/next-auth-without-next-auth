@@ -12,7 +12,7 @@ interface HomePageProps {
 }
 
 const HomePage = async ({ searchParams }: HomePageProps) => {
-  const { q, sort } = searchParams
+  const { q, sort } = await searchParams
   const { user } = await getAuth()
 
   return (

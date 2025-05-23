@@ -21,3 +21,8 @@ Wrap the server action inside a function to handle after submitting actions like
 ## Search
 
 input search => change url => page get new param => getPosts(query)
+
+## Sort
+
+Create sort object including value, label and orderby for prisma query
+sort => change url => page get new param => getPosts(sort)
