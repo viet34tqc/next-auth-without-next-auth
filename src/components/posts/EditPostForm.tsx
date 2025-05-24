@@ -8,12 +8,17 @@ import { Label } from '@/components/ui/label'
 import { SelectWithHiddenInput } from '@/components/ui/select-with-hidden-input'
 import { Textarea } from '@/components/ui/textarea'
 import { EMPTY_FORM_STATE } from '@/lib/constants'
+import { Post } from '@prisma/client'
 import { useActionState } from 'react'
-import { createPost } from '../../_actions/createPost'
-import { SubmitButton } from '../SubmitButton'
+import { updatePost } from '@/app/posts/_actions/updatePost'
+import { SubmitButton } from './SubmitButton'
 
-export function CreatePostForm({ onSuccess }: { onSuccess: () => void }) {
-  const [actionState, action] = useActionState(createPost, EMPTY_FORM_STATE)
+export function EditPostForm({ post, onSuccess }: { post: Post; onSuccess: () => void }) {
+  const [actionState, action] = useActionState(
+    (actionState: typeof EMPTY_FORM_STATE, formData: FormData) =>
+      updatePost(post.id, actionState, formData),
+    EMPTY_FORM_STATE,
+  )
 
   useToastActionFeedback(actionState, {
     onSuccessCallback: () => onSuccess(),
@@ -23,7 +28,7 @@ export function CreatePostForm({ onSuccess }: { onSuccess: () => void }) {
     <form action={action} className='space-y-6'>
       <div className='space-y-2'>
         <Label htmlFor='title'>Title</Label>
-        <Input id='title' name='title' placeholder='Post title' />
+        <Input id='title' name='title' placeholder='Post title' defaultValue={post.title} />
         <FieldError actionState={actionState} name='title' />
       </div>
 
@@ -34,6 +39,7 @@ export function CreatePostForm({ onSuccess }: { onSuccess: () => void }) {
           name='content'
           placeholder='Post content'
           className='min-h-[100px] resize-none'
+          defaultValue={post.content}
         />
         <FieldError actionState={actionState} name='content' />
       </div>
@@ -42,7 +48,7 @@ export function CreatePostForm({ onSuccess }: { onSuccess: () => void }) {
         <Label htmlFor='status'>Status</Label>
         <SelectWithHiddenInput
           name='status'
-          defaultValue='DRAFT'
+          defaultValue={post.status}
           placeholder='Select a status'
           options={[
             { value: 'DRAFT', label: 'Draft' },
@@ -55,7 +61,11 @@ export function CreatePostForm({ onSuccess }: { onSuccess: () => void }) {
 
       <div className='space-y-2 relative'>
         <Label htmlFor='featuredAt'>Featured Date</Label>
-        <DatePicker name='featuredAt' className='w-full' />
+        <DatePicker
+          name='featuredAt'
+          className='w-full'
+          defaultValue={post.featuredAt instanceof Date ? post.featuredAt : undefined}
+        />
         <FieldError actionState={actionState} name='featuredAt' />
       </div>
 
@@ -63,7 +73,7 @@ export function CreatePostForm({ onSuccess }: { onSuccess: () => void }) {
         <p className='text-destructive text-sm font-medium'>{actionState.message}</p>
       )}
 
-      <SubmitButton label='Create Post' loading='Creating...' />
+      <SubmitButton label='Update Post' loading='Updating...' />
     </form>
   )
 }

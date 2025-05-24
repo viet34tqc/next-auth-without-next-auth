@@ -1,8 +1,8 @@
 'use client'
 
 import useToastActionFeedback from '@/app/hooks/useToastActionFeedback'
-import { SubmitButton } from '@/app/posts/_components/SubmitButton'
 import { FieldError } from '@/components/form/FieldError'
+import { SubmitButton } from '@/components/posts/SubmitButton'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'

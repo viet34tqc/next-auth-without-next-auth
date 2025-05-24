@@ -1,13 +1,13 @@
+import { BackButton } from '@/components/layout/BackButton'
 import Placeholder from '@/components/layout/Placeholder'
+import { DeletePostButton } from '@/components/posts/DeletePostButton'
+import { EditPostButton } from '@/components/posts/EditPostDialog'
 import { Separator } from '@/components/ui/separator'
 import { getAuth } from '@/lib/auth/cookie'
 import { format } from 'date-fns'
 import { Calendar, Clock, Star } from 'lucide-react'
 import { Metadata } from 'next'
-import { BackButton } from '@/components/layout/BackButton'
 import { getPost } from '../_apis/getPost'
-import { DeletePostButton } from '../_components/DeletePostButton'
-import { EditPostButton } from '../_components/EditPostDialog'
 
 // Generate metadata for SEO
 export async function generateMetadata({

@@ -14,7 +14,7 @@ import { Button } from '@/components/ui/button'
 import { EMPTY_FORM_STATE } from '@/lib/constants'
 import { useActionState, useState } from 'react'
 import { useFormStatus } from 'react-dom'
-import { deletePost } from '../_actions/deletePost'
+import { deletePost } from '@/app/posts/_actions/deletePost'
 
 const DeleteButton = () => {
   const { pending } = useFormStatus()

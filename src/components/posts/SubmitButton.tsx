@@ -5,6 +5,7 @@ type SubmitButtonProps = {
   label: string
   loading: React.ReactNode
 }
+
 export const SubmitButton = ({ label, loading }: SubmitButtonProps) => {
   const { pending } = useFormStatus()
 

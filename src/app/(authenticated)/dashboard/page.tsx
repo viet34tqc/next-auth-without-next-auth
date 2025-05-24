@@ -1,6 +1,6 @@
-import { CreatePostButton } from '@/app/posts/_components/CreatePostDialog'
 import Loading from '@/app/posts/loading'
 import PageHeader from '@/components/layout/PageHeader'
+import { CreatePostButton } from '@/components/posts/CreatePostDialog'
 import SearchAndSort from '@/components/posts/SearchAndSort'
 import { SearchParams } from '@/components/posts/types'
 import { Suspense } from 'react'

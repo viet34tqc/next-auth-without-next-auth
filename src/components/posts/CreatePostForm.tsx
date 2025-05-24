@@ -8,17 +8,13 @@ import { Label } from '@/components/ui/label'
 import { SelectWithHiddenInput } from '@/components/ui/select-with-hidden-input'
 import { Textarea } from '@/components/ui/textarea'
 import { EMPTY_FORM_STATE } from '@/lib/constants'
-import { Post } from '@prisma/client'
 import { useActionState } from 'react'
-import { updatePost } from '../../_actions/updatePost'
-import { SubmitButton } from '../SubmitButton'
+import { createPost } from '@/app/posts/_actions/createPost'
+import { SubmitButton } from './SubmitButton'
 
-export function EditPostForm({ post, onSuccess }: { post: Post; onSuccess: () => void }) {
-  const [actionState, action] = useActionState(
-    (actionState: typeof EMPTY_FORM_STATE, formData: FormData) =>
-      updatePost(post.id, actionState, formData),
-    EMPTY_FORM_STATE,
-  )
+export function CreatePostForm({ onSuccess }: { onSuccess: () => void }) {
+  const [actionState, action] = useActionState(createPost, EMPTY_FORM_STATE)
+
   useToastActionFeedback(actionState, {
     onSuccessCallback: () => onSuccess(),
   })
@@ -27,7 +23,7 @@ export function EditPostForm({ post, onSuccess }: { post: Post; onSuccess: () =>
     <form action={action} className='space-y-6'>
       <div className='space-y-2'>
         <Label htmlFor='title'>Title</Label>
-        <Input id='title' name='title' placeholder='Post title' defaultValue={post.title} />
+        <Input id='title' name='title' placeholder='Post title' />
         <FieldError actionState={actionState} name='title' />
       </div>
 
@@ -38,7 +34,6 @@ export function EditPostForm({ post, onSuccess }: { post: Post; onSuccess: () =>
           name='content'
           placeholder='Post content'
           className='min-h-[100px] resize-none'
-          defaultValue={post.content}
         />
         <FieldError actionState={actionState} name='content' />
       </div>
@@ -47,7 +42,7 @@ export function EditPostForm({ post, onSuccess }: { post: Post; onSuccess: () =>
         <Label htmlFor='status'>Status</Label>
         <SelectWithHiddenInput
           name='status'
-          defaultValue={post.status}
+          defaultValue='DRAFT'
           placeholder='Select a status'
           options={[
             { value: 'DRAFT', label: 'Draft' },
@@ -60,11 +55,7 @@ export function EditPostForm({ post, onSuccess }: { post: Post; onSuccess: () =>
 
       <div className='space-y-2 relative'>
         <Label htmlFor='featuredAt'>Featured Date</Label>
-        <DatePicker
-          name='featuredAt'
-          className='w-full'
-          defaultValue={post.featuredAt instanceof Date ? post.featuredAt : undefined}
-        />
+        <DatePicker name='featuredAt' className='w-full' />
         <FieldError actionState={actionState} name='featuredAt' />
       </div>
 
@@ -72,7 +63,7 @@ export function EditPostForm({ post, onSuccess }: { post: Post; onSuccess: () =>
         <p className='text-destructive text-sm font-medium'>{actionState.message}</p>
       )}
 
-      <SubmitButton label='Update Post' loading='Updating...' />
+      <SubmitButton label='Create Post' loading='Creating...' />
     </form>
   )
 }
