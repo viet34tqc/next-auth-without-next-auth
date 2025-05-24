@@ -6,34 +6,50 @@ import { prisma } from '@/lib/prisma'
 export const getUserPosts = async (
   query?: string,
   sort?: SortOption,
-): Promise<PostAndUsername[]> => {
-  // Get the current user session
+  page: number = 1,
+  limit: number = 10,
+): Promise<{ posts: PostAndUsername[]; total: number }> => {
   const { session } = await getAuth()
-  const q = query || ''
+  if (!session?.userId) throw new Error('Not authenticated')
 
-  if (!session) {
-    return []
-  }
+  const q = query || ''
+  const skip = (page - 1) * limit
 
   // Get the orderBy object based on the sort parameter
   const orderBy = getSortOrderBy(sort)
 
-  return prisma.post.findMany({
-    where: {
-      userId: session.userId,
-      ...(q
-        ? {
-            OR: [{ title: { contains: q } }, { content: { contains: q } }],
-          }
-        : {}),
-    },
-    orderBy,
-    include: {
-      user: {
-        select: {
-          username: true,
+  const [posts, total] = await Promise.all([
+    prisma.post.findMany({
+      where: {
+        userId: session.userId,
+        ...(q
+          ? {
+              OR: [{ title: { contains: q } }, { content: { contains: q } }],
+            }
+          : {}),
+      },
+      orderBy,
+      include: {
+        user: {
+          select: {
+            username: true,
+          },
         },
       },
-    },
-  })
+      skip,
+      take: limit,
+    }),
+    prisma.post.count({
+      where: {
+        userId: session.userId,
+        ...(q
+          ? {
+              OR: [{ title: { contains: q } }, { content: { contains: q } }],
+            }
+          : {}),
+      },
+    }),
+  ])
+
+  return { posts, total }
 }

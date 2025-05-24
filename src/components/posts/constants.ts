@@ -41,3 +41,5 @@ export const SORT_OPTIONS = {
  * Array of sort options for use in UI components
  */
 export const SORT_OPTIONS_LIST = Object.values(SORT_OPTIONS)
+
+export const ITEMS_PER_PAGE = 5
