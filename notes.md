@@ -4,13 +4,25 @@
 
 - Static rendering
   - time-based caching: `export const revalidate = 60`
-  - on-demand caching: `revalidatePath(PATH)
+  - on-demand caching: `revalidatePath(PATH)`
 - request caching: `import { cache } from react`
-- data caching: fetch(URL, { next: {revalidate: 60} })
+- data caching: fetch(URL, { next: { revalidate: 60 } })
 
 ## Server Action
 
 Wrap the server action inside a function to handle after submitting actions like in the create post form. However, the actionState from useFormState is not updated. So, if you are using error message from actionState, don't wrap the server action inside a function.
+
+## Params
+
+Params now require asynchronous fetching.
+
+```ts
+interface HomePageProps {
+  searchParams: Promise<SearchParams>
+}
+
+const { q, sort } = await searchParams
+```
 
 ## Routes
 

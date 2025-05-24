@@ -6,7 +6,7 @@ import { SearchParams } from '@/components/posts/types'
 import { Suspense } from 'react'
 
 interface HomePageProps {
-  searchParams: SearchParams
+  searchParams: Promise<SearchParams>
 }
 
 const HomePage = async ({ searchParams }: HomePageProps) => {

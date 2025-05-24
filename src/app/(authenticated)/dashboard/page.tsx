@@ -7,7 +7,7 @@ import { Suspense } from 'react'
 import PostList from './_components/PostList'
 
 interface DashboardPageProps {
-  searchParams: SearchParams
+  searchParams: Promise<SearchParams>
 }
 
 const DashboardPage = async ({ searchParams }: DashboardPageProps) => {
