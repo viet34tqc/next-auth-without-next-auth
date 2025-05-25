@@ -1,4 +1,4 @@
-import { ITEMS_PER_PAGE } from '@/components/posts/constants'
+import { DEFAULT_PAGE_SIZE } from '@/components/posts/constants'
 import type { PostAndUsername, SortOption } from '@/components/posts/types'
 import { getSortOrderBy } from '@/components/posts/utils'
 import { prisma } from '@/lib/prisma'
@@ -7,7 +7,7 @@ export const getPosts = async (
   query?: string,
   sort?: SortOption,
   page: number = 1,
-  limit: number = ITEMS_PER_PAGE,
+  limit: number = DEFAULT_PAGE_SIZE,
 ): Promise<{ posts: PostAndUsername[]; total: number }> => {
   const q = query || ''
   const skip = (page - 1) * limit

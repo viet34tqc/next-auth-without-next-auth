@@ -5,6 +5,7 @@ import SearchAndSort from '@/components/posts/SearchAndSort'
 import { SearchParams } from '@/components/posts/types'
 import { Suspense } from 'react'
 import PostList from './_components/PostList'
+import { DEFAULT_PAGE_SIZE } from '@/components/posts/constants'
 
 interface DashboardPageProps {
   searchParams: Promise<SearchParams>
@@ -13,6 +14,7 @@ interface DashboardPageProps {
 const DashboardPage = async ({ searchParams }: DashboardPageProps) => {
   const params = await searchParams
   const page = params.page ? parseInt(params.page) : 1
+  const size = params.limit ? parseInt(params.limit) : DEFAULT_PAGE_SIZE
 
   return (
     <>
@@ -22,7 +24,7 @@ const DashboardPage = async ({ searchParams }: DashboardPageProps) => {
         <SearchAndSort />
 
         <Suspense fallback={<Loading />}>
-          <PostList query={params.q} sort={params.sort} page={page} />
+          <PostList query={params.q} sort={params.sort} page={page} size={size} />
         </Suspense>
       </div>
     </>

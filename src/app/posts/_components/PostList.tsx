@@ -1,5 +1,5 @@
 import Placeholder from '@/components/layout/Placeholder'
-import { ITEMS_PER_PAGE } from '@/components/posts/constants'
+import { DEFAULT_PAGE_SIZE } from '@/components/posts/constants'
 import Pagination from '@/components/posts/Pagination'
 import PostItem from '@/components/posts/PostItem'
 import { SortOption } from '@/components/posts/types'
@@ -8,11 +8,12 @@ import { getPosts } from '../_apis/getPosts'
 interface PostListProps {
   query?: string
   sort?: SortOption
-  page?: number
+  page: number
+  size: number
 }
 
-const PostList = async ({ query, sort, page = 1 }: PostListProps) => {
-  const { posts, total } = await getPosts(query, sort, page, ITEMS_PER_PAGE)
+const PostList = async ({ query, sort, page = 1, size = DEFAULT_PAGE_SIZE }: PostListProps) => {
+  const { posts, total } = await getPosts(query, sort, page, size)
 
   if (!posts.length) {
     return <Placeholder text={query ? `No posts found for "${query}"` : 'No posts found'} />
@@ -26,7 +27,7 @@ const PostList = async ({ query, sort, page = 1 }: PostListProps) => {
         ))}
       </div>
 
-      <Pagination currentPage={page} totalItems={total} itemsPerPage={ITEMS_PER_PAGE} />
+      <Pagination currentPage={page} totalItems={total} itemsPerPage={size} />
     </div>
   )
 }

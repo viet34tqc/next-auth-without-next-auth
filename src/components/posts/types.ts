@@ -18,6 +18,7 @@ export type SearchParams = {
   q?: string
   sort?: SortOption
   page?: string
+  limit?: string
 }
 
 export type SortOption = keyof typeof SORT_OPTIONS

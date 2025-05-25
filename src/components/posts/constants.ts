@@ -42,4 +42,5 @@ export const SORT_OPTIONS = {
  */
 export const SORT_OPTIONS_LIST = Object.values(SORT_OPTIONS)
 
-export const ITEMS_PER_PAGE = 5
+export const PAGE_SIZE_OPTIONS = [5, 10, 20, 50] as const
+export const DEFAULT_PAGE_SIZE = PAGE_SIZE_OPTIONS[0]
