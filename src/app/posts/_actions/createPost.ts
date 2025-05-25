@@ -46,7 +46,7 @@ export async function createPost(formState: ActionState, formData: FormData) {
       },
     })
 
-    revalidatePath('/')
+    revalidatePath(PATHS.home())
     revalidatePath(PATHS.dashboard())
 
     return fromMessageToFormState('SUCCESS', 'Post created successfully')

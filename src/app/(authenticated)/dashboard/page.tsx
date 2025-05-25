@@ -7,11 +7,12 @@ import { Suspense } from 'react'
 import PostList from './_components/PostList'
 
 interface DashboardPageProps {
-  searchParams: SearchParams & { page?: string }
+  searchParams: Promise<SearchParams>
 }
 
 const DashboardPage = async ({ searchParams }: DashboardPageProps) => {
-  const page = searchParams.page ? parseInt(searchParams.page) : 1
+  const params = await searchParams
+  const page = params.page ? parseInt(params.page) : 1
 
   return (
     <>
@@ -21,7 +22,7 @@ const DashboardPage = async ({ searchParams }: DashboardPageProps) => {
         <SearchAndSort />
 
         <Suspense fallback={<Loading />}>
-          <PostList query={searchParams.q} sort={searchParams.sort} page={page} />
+          <PostList query={params.q} sort={params.sort} page={page} />
         </Suspense>
       </div>
     </>

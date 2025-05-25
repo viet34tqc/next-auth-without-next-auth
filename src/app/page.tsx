@@ -10,7 +10,8 @@ interface HomePageProps {
 }
 
 const HomePage = async ({ searchParams }: HomePageProps) => {
-  const { q, sort } = await searchParams
+  const params = await searchParams
+  const page = params.page ? parseInt(params.page) : 1
 
   return (
     <>
@@ -19,7 +20,7 @@ const HomePage = async ({ searchParams }: HomePageProps) => {
         <SearchAndSort />
 
         <Suspense fallback={<Loading />}>
-          <PostList query={q || ''} sort={sort} />
+          <PostList query={params.q} sort={params.sort} page={page} />
         </Suspense>
       </div>
     </>

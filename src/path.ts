@@ -1,4 +1,5 @@
 export const PATHS = {
+  home: () => '/',
   posts: () => '/posts',
   post: (postId: string) => `${PATHS.posts()}/${postId}`,
   dashboard: () => '/dashboard',

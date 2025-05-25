@@ -17,6 +17,7 @@ export type PostAndUsername = Prisma.PostGetPayload<{
 export type SearchParams = {
   q?: string
   sort?: SortOption
+  page?: string
 }
 
 export type SortOption = keyof typeof SORT_OPTIONS
