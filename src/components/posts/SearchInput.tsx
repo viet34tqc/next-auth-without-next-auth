@@ -16,8 +16,10 @@ const SearchInput = () => {
 
     if (value) {
       params.set('q', value)
+      params.set('page', '1')
     } else {
       params.delete('q')
+      params.delete('page')
     }
 
     replace(`${pathname}?${params.toString()}`)
