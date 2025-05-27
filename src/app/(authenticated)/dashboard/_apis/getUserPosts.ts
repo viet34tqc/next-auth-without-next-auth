@@ -18,7 +18,7 @@ export const getUserPosts = async (
   // Get the orderBy object based on the sort parameter
   const orderBy = getSortOrderBy(sort)
 
-  const [posts, total] = await Promise.all([
+  const [posts, total] = await prisma.$transaction([
     prisma.post.findMany({
       where: {
         userId: session.userId,

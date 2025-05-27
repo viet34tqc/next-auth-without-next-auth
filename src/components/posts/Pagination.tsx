@@ -33,6 +33,7 @@ export default function Pagination({ currentPage, totalItems, itemsPerPage }: Pa
   }
 
   const handlePageChange = (pageNumber: number) => {
+    // We can also use router replace like in the SearchInput and SortSelect component
     router.push(createPageURL(pageNumber))
   }
 

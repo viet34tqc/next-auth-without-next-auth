@@ -19,6 +19,7 @@ model Post {
   featuredAt DateTime?
   userId     String
   user       User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  Comment    Comment[]
 
   @@index([userId])
 }
@@ -31,6 +32,7 @@ model User {
   email        String    @unique
   passwordHash String
   posts        Post[]
+  comments     Comment[]
 }
 
 // When a user signs up or signs in, we create a session for them.
@@ -43,6 +45,19 @@ model Session {
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([userId])
+}
+
+model Comment {
+  id        String   @id @default(cuid())
+  content   String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  userId    String?
+  user      User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
+  postId    String
+  post      Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
+
+  @@index([postId, userId])
 }
 
 enum POST_STATUS {
