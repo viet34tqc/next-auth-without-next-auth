@@ -35,7 +35,7 @@ export async function createComment(formState: ActionState, formData: FormData) 
     // Verify the post exists
     const post = await prisma.post.findUnique({
       where: { id: data.postId },
-      select: { id: true },
+      select: { id: true }, // Optimize a bit by selecting only id
     })
 
     if (!post) {

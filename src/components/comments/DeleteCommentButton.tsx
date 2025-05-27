@@ -29,7 +29,7 @@ const DeleteButton = () => {
 export const DeleteCommentButton = ({ id }: { id: string }) => {
   const [open, setOpen] = useState(false)
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [_, action] = useActionState(() => deleteComment(id), EMPTY_FORM_STATE)
+  const [_, action] = useActionState(deleteComment.bind(null, id), EMPTY_FORM_STATE)
 
   return (
     <AlertDialog open={open} onOpenChange={setOpen}>

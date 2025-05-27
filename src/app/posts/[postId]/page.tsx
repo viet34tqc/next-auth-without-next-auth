@@ -1,4 +1,5 @@
 import { CommentsSection } from '@/components/comments/CommentsSection'
+import { CommentSortOption } from '@/components/comments/types'
 import { BackButton } from '@/components/layout/BackButton'
 import Placeholder from '@/components/layout/Placeholder'
 import { DeletePostButton } from '@/components/posts/DeletePostButton'
@@ -10,6 +11,10 @@ import { format } from 'date-fns'
 import { Calendar, Clock, Star } from 'lucide-react'
 import { Metadata } from 'next'
 import { getPost } from '../_apis/getPost'
+
+type PostDetailSearchParams = {
+  commentSort?: CommentSortOption
+}
 
 // Generate metadata for SEO
 export async function generateMetadata({
@@ -27,8 +32,15 @@ export async function generateMetadata({
   }
 }
 
-const PostDetail = async ({ params }: { params: Promise<{ postId: string }> }) => {
+const PostDetail = async ({
+  params,
+  searchParams,
+}: {
+  params: Promise<{ postId: string }>
+  searchParams: Promise<PostDetailSearchParams>
+}) => {
   const { postId } = await params
+  const { commentSort } = await searchParams
   const post = await getPost(postId)
   const { session } = await getAuth()
 
@@ -94,7 +106,7 @@ const PostDetail = async ({ params }: { params: Promise<{ postId: string }> }) =
 
       <p>{post.content}</p>
 
-      <CommentsSection postId={postId} />
+      <CommentsSection postId={postId} sort={commentSort} />
     </article>
   )
 }
