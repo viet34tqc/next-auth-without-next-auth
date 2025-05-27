@@ -5,6 +5,7 @@ import { DeletePostButton } from '@/components/posts/DeletePostButton'
 import { EditPostButton } from '@/components/posts/EditPostDialog'
 import { Separator } from '@/components/ui/separator'
 import { getAuth } from '@/lib/auth/cookie'
+import { DATE_FORMAT } from '@/lib/constants'
 import { format } from 'date-fns'
 import { Calendar, Clock, Star } from 'lucide-react'
 import { Metadata } from 'next'
@@ -38,7 +39,7 @@ const PostDetail = async ({ params }: { params: Promise<{ postId: string }> }) =
   }
 
   const formattedFeaturedDate = post.featuredAt
-    ? format(new Date(post.featuredAt), 'MMMM d, yyyy')
+    ? format(new Date(post.featuredAt), DATE_FORMAT)
     : null
 
   return (
@@ -55,7 +56,7 @@ const PostDetail = async ({ params }: { params: Promise<{ postId: string }> }) =
                 className='flex items-center gap-1'
               >
                 <Calendar className='h-3 w-3' />
-                Published: {post.createdAt.toLocaleDateString()}
+                Published: {format(post.createdAt, DATE_FORMAT)}
               </time>
 
               {post.updatedAt && post.updatedAt.getTime() !== post.createdAt.getTime() && (

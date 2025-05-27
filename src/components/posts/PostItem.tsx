@@ -1,6 +1,7 @@
 'use client'
 
 import { Card } from '@/components/ui/card'
+import { DATE_FORMAT } from '@/lib/constants'
 import { PATHS } from '@/path'
 import { format } from 'date-fns'
 import { Star } from 'lucide-react'
@@ -16,7 +17,7 @@ const PostItem = ({ post }: Props) => {
   const { id, title, content, status, featuredAt, user } = post
   const StatusIcon = POST_STATUS_ICONS[status]
 
-  const formattedFeaturedDate = featuredAt ? format(new Date(featuredAt), 'MMM d, yyyy') : null
+  const formattedFeaturedDate = featuredAt ? format(new Date(featuredAt), DATE_FORMAT) : null
 
   return (
     <Card className='p-4' key={id}>

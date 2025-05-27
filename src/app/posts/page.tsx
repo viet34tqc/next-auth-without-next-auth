@@ -1,4 +1,5 @@
 import PageHeader from '@/components/layout/PageHeader'
+import { DEFAULT_PAGE_SIZE } from '@/components/posts/constants'
 import { CreatePostButton } from '@/components/posts/CreatePostDialog'
 import SearchAndSort from '@/components/posts/SearchAndSort'
 import { SearchParams } from '@/components/posts/types'
@@ -7,11 +8,13 @@ import PostList from './_components/PostList'
 import Loading from './loading'
 
 interface PostsPageProps {
-  searchParams: SearchParams & { page?: string }
+  searchParams: Promise<SearchParams>
 }
 
 const PostsPage = async ({ searchParams }: PostsPageProps) => {
-  const page = searchParams.page ? parseInt(searchParams.page) : 1
+  const params = await searchParams
+  const page = params.page ? parseInt(params.page) : 1
+  const size = params.limit ? parseInt(params.limit) : DEFAULT_PAGE_SIZE
 
   return (
     <>
@@ -21,7 +24,7 @@ const PostsPage = async ({ searchParams }: PostsPageProps) => {
         <SearchAndSort />
 
         <Suspense fallback={<Loading />}>
-          <PostList query={searchParams.q} sort={searchParams.sort} page={page} />
+          <PostList query={params.q} sort={params.sort} page={page} size={size} />
         </Suspense>
       </div>
     </>

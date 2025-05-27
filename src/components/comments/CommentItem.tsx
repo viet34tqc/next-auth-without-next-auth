@@ -2,6 +2,7 @@
 
 import { Button } from '@/components/ui/button'
 import { Separator } from '@/components/ui/separator'
+import { DATE_FORMAT } from '@/lib/constants'
 import { format } from 'date-fns'
 import { Calendar, Clock, Edit } from 'lucide-react'
 import { useState } from 'react'
@@ -48,17 +49,17 @@ export function CommentItem({ comment, isOwner }: CommentItemProps) {
             <span className='font-medium text-foreground'>
               {comment.user?.username || 'Anonymous'}
             </span>
-            <Separator orientation='vertical' className='h-4' />
+            <Separator orientation='vertical' className='!h-4' />
             <time dateTime={comment.createdAt.toISOString()} className='flex items-center gap-1'>
               <Calendar className='h-3 w-3' />
-              {format(comment.createdAt, 'MMM d, yyyy')}
+              {format(comment.createdAt, DATE_FORMAT)}
             </time>
             {wasEdited && (
               <>
-                <Separator orientation='vertical' className='h-4' />
-                <span className='flex items-center gap-1 text-xs'>
+                <Separator orientation='vertical' className='!h-4' />
+                <span className='flex items-center gap-1'>
                   <Clock className='h-3 w-3' />
-                  Edited {format(comment.updatedAt, 'MMM d, yyyy')}
+                  Edited {format(comment.updatedAt, DATE_FORMAT)}
                 </span>
               </>
             )}

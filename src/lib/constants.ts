@@ -6,3 +6,5 @@ export const EMPTY_FORM_STATE: ActionState = {
   fieldErrors: {},
   timestamp: Date.now(),
 }
+
+export const DATE_FORMAT = 'MMMM d, yyyy'

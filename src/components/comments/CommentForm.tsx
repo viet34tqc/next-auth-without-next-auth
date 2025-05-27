@@ -8,6 +8,7 @@ import { SubmitButton } from '@/components/posts/SubmitButton'
 import { Button } from '@/components/ui/button'
 import { Textarea } from '@/components/ui/textarea'
 import { EMPTY_FORM_STATE } from '@/lib/constants'
+import { cn } from '@/lib/utils'
 import { useActionState, useRef, useState } from 'react'
 import { COMMENT_MAX_LENGTH } from './constants'
 import type { CommentWithUser } from './types'
@@ -62,7 +63,7 @@ export function CommentForm({ postId, comment, onSuccess, onCancel }: CommentFor
         </div>
       </div>
 
-      <div className='flex gap-2'>
+      <div className={cn('grid gap-2', { 'grid-cols-2': isEditing })}>
         <SubmitButton
           label={isEditing ? 'Update Comment' : 'Post Comment'}
           loading={isEditing ? 'Updating...' : 'Posting...'}
