@@ -1,3 +1,4 @@
+import { CommentsSection } from '@/components/comments/CommentsSection'
 import { BackButton } from '@/components/layout/BackButton'
 import Placeholder from '@/components/layout/Placeholder'
 import { DeletePostButton } from '@/components/posts/DeletePostButton'
@@ -91,6 +92,8 @@ const PostDetail = async ({ params }: { params: Promise<{ postId: string }> }) =
       </header>
 
       <p>{post.content}</p>
+
+      <CommentsSection postId={postId} />
     </article>
   )
 }

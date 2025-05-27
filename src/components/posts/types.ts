@@ -14,6 +14,12 @@ export type PostAndUsername = Prisma.PostGetPayload<{
   include: { user: { select: { username: true } } }
 }>
 
+export type PostWithCommentCount = PostAndUsername & {
+  _count?: {
+    Comment: number
+  }
+}
+
 export type SearchParams = {
   q?: string
   sort?: SortOption
