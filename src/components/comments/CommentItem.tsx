@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button'
 import { Separator } from '@/components/ui/separator'
 import { DATE_FORMAT } from '@/lib/constants'
 import { format } from 'date-fns'
-import { Calendar, Clock, Edit } from 'lucide-react'
+import { Calendar, Clock, Edit, MessageCircle } from 'lucide-react'
 import { useState } from 'react'
 import { CommentForm } from './CommentForm'
 import { DeleteCommentButton } from './DeleteCommentButton'
@@ -13,10 +13,14 @@ import type { CommentWithUser } from './types'
 type CommentItemProps = {
   comment: CommentWithUser
   isOwner: boolean
+  currentUserId?: string
+  depth?: number
 }
 
-export function CommentItem({ comment, isOwner }: CommentItemProps) {
+export function CommentItem({ comment, isOwner, currentUserId, depth }: CommentItemProps) {
+  const actualDepth = depth ?? comment.depth ?? 0
   const [isEditing, setIsEditing] = useState(false)
+  const [isReplying, setIsReplying] = useState(false)
 
   const handleEditSuccess = () => {
     setIsEditing(false)
@@ -24,6 +28,14 @@ export function CommentItem({ comment, isOwner }: CommentItemProps) {
 
   const handleEditCancel = () => {
     setIsEditing(false)
+  }
+
+  const handleReplySuccess = () => {
+    setIsReplying(false)
+  }
+
+  const handleReplyCancel = () => {
+    setIsReplying(false)
   }
 
   const wasEdited = comment.updatedAt.getTime() !== comment.createdAt.getTime()
@@ -42,7 +54,7 @@ export function CommentItem({ comment, isOwner }: CommentItemProps) {
   }
 
   return (
-    <div className='border rounded-lg p-4 space-y-3'>
+    <div className={`border rounded-lg p-4 space-y-3 ${actualDepth > 0 ? 'bg-muted/20' : ''}`}>
       <div className='flex justify-between items-start'>
         <div className='space-y-2'>
           <div className='flex items-center gap-2 text-sm text-muted-foreground'>
@@ -66,23 +78,64 @@ export function CommentItem({ comment, isOwner }: CommentItemProps) {
           </div>
         </div>
 
-        {isOwner && (
-          <div className='flex gap-1'>
+        <div className='flex gap-1'>
+          {currentUserId && actualDepth < 5 && (
             <Button
               variant='ghost'
               size='sm'
-              onClick={() => setIsEditing(true)}
-              className='text-blue-600 hover:text-blue-700 hover:bg-blue-50'
+              onClick={() => setIsReplying(true)}
+              className='text-green-600 hover:text-green-700 hover:bg-green-50'
             >
-              <Edit className='h-3 w-3' />
-              Edit
+              <MessageCircle className='h-3 w-3' />
+              Reply
             </Button>
-            <DeleteCommentButton id={comment.id} />
-          </div>
-        )}
+          )}
+          {isOwner && (
+            <>
+              <Button
+                variant='ghost'
+                size='sm'
+                onClick={() => setIsEditing(true)}
+                className='text-blue-600 hover:text-blue-700 hover:bg-blue-50'
+              >
+                <Edit className='h-3 w-3' />
+                Edit
+              </Button>
+              <DeleteCommentButton id={comment.id} />
+            </>
+          )}
+        </div>
       </div>
 
       <p className='text-sm leading-relaxed whitespace-pre-wrap'>{comment.content}</p>
+
+      {/* Reply form */}
+      {isReplying && (
+        <div className='mt-4 p-3 bg-muted/30 rounded-lg border-l-2 border-green-200'>
+          <CommentForm
+            postId={comment.postId}
+            parentId={comment.id}
+            onSuccess={handleReplySuccess}
+            onCancel={handleReplyCancel}
+          />
+        </div>
+      )}
+
+      {/* Here are the nested replies */}
+      {comment.replies && comment.replies.length > 0 && (
+        <div className='mt-4 space-y-3'>
+          {comment.replies.map((reply) => (
+            <div key={reply.id} className='ml-6  pl-4 relative'>
+              <CommentItem
+                comment={reply}
+                isOwner={currentUserId === reply.userId}
+                currentUserId={currentUserId}
+                depth={actualDepth + 1}
+              />
+            </div>
+          ))}
+        </div>
+      )}
     </div>
   )
 }

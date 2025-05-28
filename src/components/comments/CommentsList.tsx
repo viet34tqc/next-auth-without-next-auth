@@ -45,6 +45,7 @@ export function CommentsList({
             key={comment.id}
             comment={comment}
             isOwner={currentUserId === comment.userId}
+            currentUserId={currentUserId}
           />
         ))}
       </div>

@@ -21,7 +21,7 @@ export async function CommentsSection({
   limit = DEFAULT_COMMENT_PAGE_SIZE,
 }: CommentsSectionProps) {
   const { session } = await getAuth()
-  const { comments, total } = await getComments(postId, sort, page, limit)
+  const { comments, total } = await getComments({ postId, sort, page, limit })
 
   return (
     <section className='space-y-6'>

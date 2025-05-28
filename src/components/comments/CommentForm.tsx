@@ -16,11 +16,12 @@ import type { CommentWithUser } from './types'
 type CommentFormProps = {
   postId: string
   comment?: CommentWithUser
+  parentId?: string
   onSuccess?: () => void
   onCancel?: () => void
 }
 
-export function CommentForm({ postId, comment, onSuccess, onCancel }: CommentFormProps) {
+export function CommentForm({ postId, comment, parentId, onSuccess, onCancel }: CommentFormProps) {
   const [content, setContent] = useState(comment?.content || '')
   const formRef = useRef<HTMLFormElement>(null)
 
@@ -45,11 +46,18 @@ export function CommentForm({ postId, comment, onSuccess, onCancel }: CommentFor
   return (
     <form ref={formRef} action={formAction} className='space-y-4'>
       {!isEditing && <input type='hidden' name='postId' value={postId} />}
+      {!isEditing && parentId && <input type='hidden' name='parentId' value={parentId} />}
 
       <div className='space-y-2'>
         <Textarea
           name='content'
-          placeholder={isEditing ? 'Edit your comment...' : 'Write a comment...'}
+          placeholder={
+            isEditing
+              ? 'Edit your comment...'
+              : parentId
+                ? 'Write a reply...'
+                : 'Write a comment...'
+          }
           value={content}
           onChange={(e) => setContent(e.target.value)}
           className='min-h-[100px] resize-none'
@@ -65,8 +73,8 @@ export function CommentForm({ postId, comment, onSuccess, onCancel }: CommentFor
 
       <div className={cn('grid gap-2', { 'grid-cols-2': isEditing })}>
         <SubmitButton
-          label={isEditing ? 'Update Comment' : 'Post Comment'}
-          loading={isEditing ? 'Updating...' : 'Posting...'}
+          label={isEditing ? 'Update Comment' : parentId ? 'Post Reply' : 'Post Comment'}
+          loading={isEditing ? 'Updating...' : parentId ? 'Posting Reply...' : 'Posting...'}
         />
         {isEditing && onCancel && (
           <Button type='button' variant='outline' onClick={onCancel}>

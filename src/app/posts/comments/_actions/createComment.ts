@@ -19,6 +19,7 @@ const commentSchema = z.object({
       message: `Comment must be no more than ${COMMENT_MAX_LENGTH} characters`,
     }),
   postId: z.string().min(1, { message: 'Post ID is required' }),
+  parentId: z.string().optional(),
 })
 
 export async function createComment(formState: ActionState, formData: FormData) {
@@ -32,7 +33,7 @@ export async function createComment(formState: ActionState, formData: FormData) 
     const formDataRaw = Object.fromEntries(formData.entries())
     const data = commentSchema.parse(formDataRaw)
 
-    // Verify the post exists
+    // First, verify the post exists
     const post = await prisma.post.findUnique({
       where: { id: data.postId },
       select: { id: true }, // Optimize a bit by selecting only id
@@ -42,11 +43,28 @@ export async function createComment(formState: ActionState, formData: FormData) 
       throw new Error('Post not found')
     }
 
+    // If parentId is provided, verify the parent comment exists and belongs to the same post
+    if (data.parentId) {
+      const parentComment = await prisma.comment.findUnique({
+        where: { id: data.parentId },
+        select: { id: true, postId: true },
+      })
+
+      if (!parentComment) {
+        throw new Error('Parent comment not found')
+      }
+
+      if (parentComment.postId !== data.postId) {
+        throw new Error('Parent comment does not belong to this post')
+      }
+    }
+
     await prisma.comment.create({
       data: {
         content: data.content,
         postId: data.postId,
         userId: session.userId,
+        parentId: data.parentId || null,
       },
     })
 

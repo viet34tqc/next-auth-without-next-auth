@@ -16,6 +16,7 @@ export const COMMENT_SORT_OPTIONS: Record<string, CommentSortConfig> = {
 export const COMMENT_SORT_OPTIONS_LIST = Object.values(COMMENT_SORT_OPTIONS)
 
 export const COMMENT_MAX_LENGTH = 1000
+export const COMMENT_MAX_DEPTH = 5
 export const COMMENT_MIN_LENGTH = 1
 
 export const COMMENT_PAGE_SIZE_OPTIONS = [5, 10, 20]
