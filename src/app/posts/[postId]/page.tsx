@@ -8,6 +8,7 @@ import { EditPostButton } from '@/components/posts/EditPostDialog'
 import { Separator } from '@/components/ui/separator'
 import { getAuth } from '@/lib/auth/cookie'
 import { DATE_FORMAT } from '@/lib/constants'
+import { PATHS } from '@/path'
 import { format } from 'date-fns'
 import { Calendar, Clock, Star } from 'lucide-react'
 import { Metadata } from 'next'
@@ -59,9 +60,11 @@ const PostDetail = async ({
     ? format(new Date(post.featuredAt), DATE_FORMAT)
     : null
 
+  const backUrl = isOwner ? PATHS.dashboard() : PATHS.home()
+
   return (
     <article className='space-y-6 max-w-5xl mx-auto'>
-      <BackButton />
+      <BackButton backUrl={backUrl} />
       <header>
         <div className='flex flex-wrap gap-2 justify-between items-center'>
           <div className='space-y-3 text-sm'>
