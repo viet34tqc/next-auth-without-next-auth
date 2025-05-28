@@ -13,6 +13,7 @@ import { format } from 'date-fns'
 import { Calendar, Clock, Star } from 'lucide-react'
 import { Metadata } from 'next'
 import { getPost } from '../_apis/getPost'
+import { getComments } from '../comments/_apis/getComments'
 
 type PostDetailSearchParams = {
   commentSort?: CommentSortOption
@@ -30,9 +31,16 @@ export async function generateMetadata({
   const { postId } = await params
   const post = await getPost(postId)
 
+  if (!post) {
+    return {
+      title: 'Post Not Found | Next Auth without Next Auth',
+      description: 'The requested post could not be found.',
+    }
+  }
+
   return {
-    title: `${post?.title} | Next Auth without Next Auth`,
-    description: post?.content.substring(0, 160),
+    title: `${post.title} | Next Auth without Next Auth`,
+    description: post.content.substring(0, 160),
   }
 }
 
@@ -47,8 +55,16 @@ const PostDetail = async ({
   const { commentSort, commentPage, commentLimit } = await searchParams
   const page = commentPage ? parseInt(commentPage) : 1
   const limit = commentLimit ? parseInt(commentLimit) : DEFAULT_COMMENT_PAGE_SIZE
-  const post = await getPost(postId)
-  const { session } = await getAuth()
+
+  // Import getComments dynamically to avoid auto-formatting issues
+  //const { getComments } = await import('@/app/posts/comments/_apis/getComments')
+
+  // Fetch post data, comments data, and auth session in parallel for optimal performance
+  const [post, commentsData, { session }] = await Promise.all([
+    getPost(postId),
+    getComments({ postId, sort: commentSort, page, limit }),
+    getAuth(),
+  ])
 
   const isOwner = session && post?.userId === session.userId
 
@@ -114,7 +130,13 @@ const PostDetail = async ({
 
       <p>{post.content}</p>
 
-      <CommentsSection postId={postId} sort={commentSort} page={page} limit={limit} />
+      <CommentsSection
+        postId={postId}
+        comments={commentsData.comments}
+        total={commentsData.total}
+        page={page}
+        limit={limit}
+      />
     </article>
   )
 }
