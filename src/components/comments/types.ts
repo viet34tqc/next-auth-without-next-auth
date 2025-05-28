@@ -16,3 +16,9 @@ export type CommentSortConfig = {
   value: CommentSortOption
   orderBy: Prisma.CommentOrderByWithRelationInput
 }
+
+export type CommentSearchParams = {
+  commentSort?: CommentSortOption
+  commentPage?: string
+  commentLimit?: string
+}

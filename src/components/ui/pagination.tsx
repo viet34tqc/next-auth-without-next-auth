@@ -10,30 +10,40 @@ import {
 } from '@/components/ui/select'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
 import { useRouter, useSearchParams } from 'next/navigation'
-import { PAGE_SIZE_OPTIONS } from './constants'
 
 interface PaginationProps {
   currentPage: number
   totalItems: number
   itemsPerPage: number
+  pageSizeOptions: readonly number[]
+  pageParamName?: string
+  limitParamName?: string
+  itemsLabel?: string
 }
 
-export default function Pagination({ currentPage, totalItems, itemsPerPage }: PaginationProps) {
+export default function Pagination({
+  currentPage,
+  totalItems,
+  itemsPerPage,
+  pageSizeOptions,
+  pageParamName = 'page',
+  limitParamName = 'limit',
+  itemsLabel = 'Items',
+}: PaginationProps) {
   const router = useRouter()
   const searchParams = useSearchParams()
   const totalPages = Math.ceil(totalItems / itemsPerPage)
 
   const createPageURL = (pageNumber: number, newItemsPerPage?: number) => {
     const params = new URLSearchParams(searchParams)
-    params.set('page', pageNumber.toString())
+    params.set(pageParamName, pageNumber.toString())
     if (newItemsPerPage) {
-      params.set('limit', newItemsPerPage.toString())
+      params.set(limitParamName, newItemsPerPage.toString())
     }
     return `?${params.toString()}`
   }
 
   const handlePageChange = (pageNumber: number) => {
-    // We can also use router replace like in the SearchInput and SortSelect component
     router.push(createPageURL(pageNumber))
   }
 
@@ -49,13 +59,13 @@ export default function Pagination({ currentPage, totalItems, itemsPerPage }: Pa
   return (
     <div className='flex flex-col sm:flex-row items-center justify-between gap-4 mt-4'>
       <div className='flex items-center gap-2'>
-        <p className='text-sm text-muted-foreground'>Items per page</p>
+        <p className='text-sm text-muted-foreground'>{itemsLabel} per page</p>
         <Select value={itemsPerPage.toString()} onValueChange={handlePageSizeChange}>
           <SelectTrigger className='h-8 w-[70px]'>
             <SelectValue placeholder={itemsPerPage.toString()} />
           </SelectTrigger>
           <SelectContent>
-            {PAGE_SIZE_OPTIONS.map((size) => (
+            {pageSizeOptions.map((size) => (
               <SelectItem key={size} value={size.toString()}>
                 {size}
               </SelectItem>

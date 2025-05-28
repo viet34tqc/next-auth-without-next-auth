@@ -1,4 +1,5 @@
 import { CommentsSection } from '@/components/comments/CommentsSection'
+import { DEFAULT_COMMENT_PAGE_SIZE } from '@/components/comments/constants'
 import { CommentSortOption } from '@/components/comments/types'
 import { BackButton } from '@/components/layout/BackButton'
 import Placeholder from '@/components/layout/Placeholder'
@@ -14,6 +15,8 @@ import { getPost } from '../_apis/getPost'
 
 type PostDetailSearchParams = {
   commentSort?: CommentSortOption
+  commentPage?: string
+  commentLimit?: string
 }
 
 // Generate metadata for SEO
@@ -40,7 +43,9 @@ const PostDetail = async ({
   searchParams: Promise<PostDetailSearchParams>
 }) => {
   const { postId } = await params
-  const { commentSort } = await searchParams
+  const { commentSort, commentPage, commentLimit } = await searchParams
+  const page = commentPage ? parseInt(commentPage) : 1
+  const limit = commentLimit ? parseInt(commentLimit) : DEFAULT_COMMENT_PAGE_SIZE
   const post = await getPost(postId)
   const { session } = await getAuth()
 
@@ -106,7 +111,7 @@ const PostDetail = async ({
 
       <p>{post.content}</p>
 
-      <CommentsSection postId={postId} sort={commentSort} />
+      <CommentsSection postId={postId} sort={commentSort} page={page} limit={limit} />
     </article>
   )
 }
