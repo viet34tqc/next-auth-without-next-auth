@@ -34,6 +34,10 @@ const { q, sort } = await searchParams
 
 input search => change url => page get new param => getPosts(query)
 
+## Date
+
+Beware that `toLocaleString()` returns different results depends for server component and client component.
+
 ## Sort
 
 Create sort object including value, label and orderby for prisma query

@@ -8,6 +8,6 @@ export const PATHS = {
   signIn: () => '/sign-in',
   signInGithub: () => '/sign-in/github',
 
-  profile: () => '/profile',
+  profile: () => '/profile', // Points to /(authenticated)/profile
   changePassword: () => '/change-password',
 }
