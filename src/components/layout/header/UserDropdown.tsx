@@ -2,7 +2,7 @@
 
 import { signOut } from '@/app/(auth)/sign-out/_actions/sign-out'
 import { PATHS } from '@/path'
-import { LayoutDashboard, LogOut, Settings, User as UserIcon } from 'lucide-react'
+import { LayoutDashboard, LogOut, User as UserIcon } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import { Avatar, AvatarFallback } from '../../ui/avatar'
 import { Button } from '../../ui/button'
@@ -62,10 +62,6 @@ export function UserDropdown({ user }: UserDropdownProps) {
           <DropdownMenuItem onClick={() => router.push(PATHS.profile())}>
             <UserIcon className='mr-2 h-4 w-4' />
             <span>Profile</span>
-          </DropdownMenuItem>
-          <DropdownMenuItem onClick={() => router.push(PATHS.changePassword())}>
-            <Settings className='mr-2 h-4 w-4' />
-            <span>Change Password</span>
           </DropdownMenuItem>
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
