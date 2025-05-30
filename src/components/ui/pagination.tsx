@@ -56,8 +56,105 @@ export default function Pagination({
     router.push(createPageURL(newPage, newPageSize))
   }
 
+  const renderPageNumbers = () => {
+    const pages = []
+    const maxVisiblePages = 4 // Maximum number of page buttons to show
+
+    if (totalPages <= maxVisiblePages) {
+      // If total pages is small, show all pages
+      for (let i = 1; i <= totalPages; i++) {
+        pages.push(
+          <Button
+            key={i}
+            variant={currentPage === i ? 'default' : 'outline'}
+            size='icon'
+            onClick={() => handlePageChange(i)}
+          >
+            {i}
+          </Button>,
+        )
+      }
+    } else {
+      // Calculate the range of pages to show around current page
+      const sidePages = 1 // Number of pages to show on each side of current page
+      let startPage = Math.max(1, currentPage - sidePages)
+      let endPage = Math.min(totalPages, currentPage + sidePages)
+
+      // Ensure we always show at least 3 pages in the middle
+      if (endPage - startPage < 2) {
+        if (startPage === 1) {
+          endPage = Math.min(totalPages, startPage + 2)
+        } else if (endPage === totalPages) {
+          startPage = Math.max(1, endPage - 2)
+        }
+      }
+
+      // Always show first page
+      if (startPage > 1) {
+        pages.push(
+          <Button
+            key={1}
+            variant={currentPage === 1 ? 'default' : 'outline'}
+            size='icon'
+            onClick={() => handlePageChange(1)}
+          >
+            1
+          </Button>,
+        )
+
+        // Add ellipsis if there's a gap between 1 and startPage
+        if (startPage > 2) {
+          pages.push(
+            <span key='ellipsis-start' className='px-2 text-muted-foreground'>
+              ...
+            </span>,
+          )
+        }
+      }
+
+      // Add the middle range pages (including current page)
+      for (let i = startPage; i <= endPage; i++) {
+        pages.push(
+          <Button
+            key={i}
+            variant={currentPage === i ? 'default' : 'outline'}
+            size='icon'
+            onClick={() => handlePageChange(i)}
+          >
+            {i}
+          </Button>,
+        )
+      }
+
+      // Always show last page
+      if (endPage < totalPages) {
+        // Add ellipsis if there's a gap between endPage and totalPages
+        if (endPage < totalPages - 1) {
+          pages.push(
+            <span key='ellipsis-end' className='px-2 text-muted-foreground'>
+              ...
+            </span>,
+          )
+        }
+
+        pages.push(
+          <Button
+            key={totalPages}
+            variant={currentPage === totalPages ? 'default' : 'outline'}
+            size='icon'
+            onClick={() => handlePageChange(totalPages)}
+          >
+            {totalPages}
+          </Button>,
+        )
+      }
+    }
+
+    return pages
+  }
+
   return (
-    <div className='flex flex-col sm:flex-row items-center justify-between gap-4 mt-4'>
+    <div className='flex flex-col sm:flex-row flex-wrap items-center justify-between gap-4 mt-4'>
       <div className='flex items-center gap-2'>
         <p className='text-sm text-muted-foreground'>{itemsLabel} per page</p>
         <Select value={itemsPerPage.toString()} onValueChange={handlePageSizeChange}>
@@ -83,18 +180,7 @@ export default function Pagination({
           <ChevronLeft className='h-4 w-4' />
         </Button>
 
-        <div className='flex items-center gap-1'>
-          {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
-            <Button
-              key={page}
-              variant={currentPage === page ? 'default' : 'outline'}
-              size='icon'
-              onClick={() => handlePageChange(page)}
-            >
-              {page}
-            </Button>
-          ))}
-        </div>
+        <div className='flex items-center gap-1'>{renderPageNumbers()}</div>
 
         <Button
           variant='outline'
