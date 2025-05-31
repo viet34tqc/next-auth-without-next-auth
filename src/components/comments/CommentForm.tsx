@@ -10,6 +10,7 @@ import { Textarea } from '@/components/ui/textarea'
 import { EMPTY_FORM_STATE } from '@/lib/constants'
 import { cn } from '@/lib/utils'
 import { useActionState, useRef, useState } from 'react'
+import SubmitIdField from '../form/SubmitIdField'
 import { COMMENT_MAX_LENGTH } from './constants'
 import type { CommentWithUser } from './types'
 
@@ -45,6 +46,8 @@ export function CommentForm({ postId, comment, parentId, onSuccess, onCancel }: 
 
   return (
     <form ref={formRef} action={formAction} className='space-y-4'>
+      <SubmitIdField />
+
       {!isEditing && <input type='hidden' name='postId' value={postId} />}
       {!isEditing && parentId && <input type='hidden' name='parentId' value={parentId} />}
 

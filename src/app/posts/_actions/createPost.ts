@@ -1,15 +1,14 @@
 'use server'
 
-const submitIdList = new Set<string>()
-
-import { PostStatus } from '@/components/posts/types'
 import { getAuth } from '@/lib/auth/cookie'
+import { addSubmitId, hasSubmitId, clearSubmitIdList } from '@/lib/form/submitIdSet'
 import { prisma } from '@/lib/prisma'
 import { ActionState } from '@/lib/types'
 import { fromErrorfromMessageToFormState, fromMessageToFormState } from '@/lib/utils'
 import { PATHS } from '@/path'
 import { revalidatePath } from 'next/cache'
 import { z } from 'zod'
+import { PostStatus } from '../_types'
 
 const postSchema = z.object({
   title: z
@@ -38,11 +37,11 @@ export async function createPost(formState: ActionState, formData: FormData) {
     const formDataRaw = Object.fromEntries(formData.entries())
     const data = postSchema.parse(formDataRaw)
 
-    if (submitIdList.has(data.submitId)) {
+    if (hasSubmitId(data.submitId)) {
       throw new Error('You are submitting too quickly. Please wait a moment.')
     }
 
-    submitIdList.add(data.submitId)
+    addSubmitId(data.submitId)
 
     await prisma.post.create({
       data: {
@@ -63,7 +62,7 @@ export async function createPost(formState: ActionState, formData: FormData) {
     return fromErrorfromMessageToFormState(error)
   } finally {
     setTimeout(() => {
-      submitIdList.clear()
+      clearSubmitIdList()
     }, 1000)
   }
 }

@@ -2,6 +2,7 @@
 
 import { COMMENT_MAX_LENGTH, COMMENT_MIN_LENGTH } from '@/components/comments/constants'
 import { getAuth } from '@/lib/auth/cookie'
+import { addSubmitId, hasSubmitId, clearSubmitIdList } from '@/lib/form/submitIdSet'
 import { prisma } from '@/lib/prisma'
 import { ActionState } from '@/lib/types'
 import { fromErrorfromMessageToFormState, fromMessageToFormState } from '@/lib/utils'
@@ -20,6 +21,7 @@ const commentSchema = z.object({
     }),
   postId: z.string().min(1, { message: 'Post ID is required' }),
   parentId: z.string().optional(),
+  submitId: z.string().min(1, { message: 'Submit ID is required' }),
 })
 
 export async function createComment(formState: ActionState, formData: FormData) {
@@ -59,6 +61,12 @@ export async function createComment(formState: ActionState, formData: FormData) 
       }
     }
 
+    if (hasSubmitId(data.submitId)) {
+      throw new Error('You are submitting too quickly. Please wait a moment.')
+    }
+
+    addSubmitId(data.submitId)
+
     await prisma.comment.create({
       data: {
         content: data.content,
@@ -74,5 +82,9 @@ export async function createComment(formState: ActionState, formData: FormData) 
     return fromMessageToFormState('SUCCESS', 'Comment added successfully')
   } catch (error) {
     return fromErrorfromMessageToFormState(error)
+  } finally {
+    setTimeout(() => {
+      clearSubmitIdList()
+    }, 1000)
   }
 }
