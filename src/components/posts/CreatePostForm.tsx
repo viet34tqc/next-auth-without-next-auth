@@ -1,6 +1,7 @@
 'use client'
 
 import useToastActionFeedback from '@/app/hooks/useToastActionFeedback'
+import { createPost } from '@/app/posts/_actions/createPost'
 import { FieldError } from '@/components/form/FieldError'
 import { DatePicker } from '@/components/ui/datepicker'
 import { Input } from '@/components/ui/input'
@@ -9,7 +10,7 @@ import { SelectWithHiddenInput } from '@/components/ui/select-with-hidden-input'
 import { Textarea } from '@/components/ui/textarea'
 import { EMPTY_FORM_STATE } from '@/lib/constants'
 import { useActionState } from 'react'
-import { createPost } from '@/app/posts/_actions/createPost'
+import SubmitIdField from '../form/SubmitIdField'
 import { SubmitButton } from './SubmitButton'
 
 export function CreatePostForm({ onSuccess }: { onSuccess: () => void }) {
@@ -21,6 +22,8 @@ export function CreatePostForm({ onSuccess }: { onSuccess: () => void }) {
 
   return (
     <form action={action} className='space-y-6'>
+      <SubmitIdField />
+
       <div className='space-y-2'>
         <Label htmlFor='title'>Title</Label>
         <Input id='title' name='title' placeholder='Post title' />
