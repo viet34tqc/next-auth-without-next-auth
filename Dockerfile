@@ -15,16 +15,20 @@ RUN --mount=type=cache,id=pnpm,target=/pnpm/store \
 # Stage 3: Build the application
 FROM base AS builder
 WORKDIR /app
+# Copy dependencies first for better caching
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
-RUN --mount=type=cache,id=prisma,target=/app/prisma \
-    npx prisma generate
+# pnpm build needs Prisma clients
+RUN npx prisma generate
 RUN pnpm build
 
 # Stage 4: Production stage
 FROM base AS runner
 WORKDIR /app
 ENV NODE_ENV=production
+# Disable Next.js telemetry
+# Learn more here: https://nextjs.org/telemetry
+ENV NEXT_TELEMETRY_DISABLED 1
 
 # Create appuser and data folder (for sqlite db volume)
 RUN addgroup -S appgroup && \
@@ -35,8 +39,6 @@ RUN addgroup -S appgroup && \
 # Switch to non-root user
 USER appuser
 
-
-# Copy necessary files from builder stage
 COPY --from=builder --chown=appuser:appgroup /app/.next/standalone ./
 COPY --from=builder --chown=appuser:appgroup /app/.next/static ./.next/static
 COPY --from=builder --chown=appuser:appgroup /app/prisma ./prisma
@@ -44,5 +46,5 @@ COPY --from=builder --chown=appuser:appgroup /app/prisma ./prisma
 # This information is stored in package.json.
 COPY --from=builder --chown=appuser:appgroup /app/package.json ./
 
-# Default command with database setup and server start
-CMD ["sh", "-c", "npx prisma generate && npx prisma db push && node server.js"]
+# Fix Error: P3005 The database schema is not empty.
+CMD ["sh", "-c", "npx prisma generate && (npx prisma migrate deploy || npx prisma db push) && node server.js"]
