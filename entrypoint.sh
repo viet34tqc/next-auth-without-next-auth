@@ -1,5 +1,5 @@
 #!/bin/sh
 echo "Entrypoint is running!"
+npx prisma migrate deploy
 npx prisma generate
-npx prisma db push
-exec "$@"
+node server.js
