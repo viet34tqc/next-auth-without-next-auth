@@ -1,0 +1,18 @@
+services:
+  app:
+    build:
+      context: .
+    restart: unless-stopped
+    ports:
+      - '3000:3000'
+    init: true
+    environment:
+      - NODE_ENV=production
+      - DATABASE_URL=file:/data/sqlite.db
+      - GITHUB_CLIENT_ID=${GITHUB_CLIENT_ID}
+      - GITHUB_CLIENT_SECRET=${GITHUB_CLIENT_SECRET}
+    volumes:
+      - sqlite_data:/data
+volumes:
+  sqlite_data:
+    driver: local

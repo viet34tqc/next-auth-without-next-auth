@@ -111,3 +111,29 @@ The database has three main models:
 - **User**: Stores user information
 - **Post**: Stores blog posts with a reference to the author
 - **Session**: Stores active user sessions
+
+---
+
+## Running with Docker
+
+### Environment Variables
+
+Before building the Docker image, ensure you have a `.env` file in the project root with the following variables:
+
+```env
+DATABASE_URL="file:./dev.db"
+GITHUB_CLIENT_ID=your_github_client_id
+GITHUB_CLIENT_SECRET=your_github_client_secret
+```
+
+The template `.env.example` file can be used as a reference.
+
+### Build and Run
+
+1. Build and start the application using Docker Compose:
+
+   ```bash
+   docker compose up --build
+   ```
+
+   This will build the image and start the `typescript-app` service.

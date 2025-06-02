@@ -1,4 +1,5 @@
-@import 'tailwindcss';
+/* Why need source('../'): https://github.com/tailwindlabs/tailwindcss/discussions/17016 */
+@import 'tailwindcss' source('../');
 @import 'tw-animate-css';
 
 @custom-variant dark (&:is(.dark *));
