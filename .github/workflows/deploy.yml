@@ -4,7 +4,16 @@ on:
   push:
     branches:
       - master
-
+  workflow_dispatch:
+    inputs:
+      update_env:
+        description: 'Update .env file on VPS?'
+        required: true
+        default: 'no'
+        type: choice
+        options:
+          - yes
+          - no
 jobs:
   deploy:
     runs-on: ubuntu-latest
@@ -20,13 +29,13 @@ jobs:
             cd /var/www/next-auth-without-next-auth
 
             echo "Checking if .env file exists..."
-            if [ ! -f .env ]; then
-              echo "Generating .env from GitHub Secrets..."
-              echo "DATABASE_URL=file:./dev.db" >> .env
+            if [ "${{ github.event.inputs.update_env }}" = "true" ]; then
+              echo "Overwriting .env from GitHub Secrets..."
+              echo "DATABASE_URL=file:./dev.db" > .env
               echo "GITHUB_CLIENT_ID=${{ secrets.GB_CLIENT_ID }}" >> .env
               echo "GITHUB_CLIENT_SECRET=${{ secrets.GB_CLIENT_SECRET }}" >> .env
             else
-              echo ".env already exists. Skipping secret injection."
+              echo "Skipping .env update."
             fi
 
             echo "Pulling latest code and rebuilding..."
