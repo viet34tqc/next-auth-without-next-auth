@@ -2,6 +2,13 @@
 
 A blog platform built with Next.js that implements custom authentication without using the Next Auth library. This project demonstrates how to build a secure authentication system from scratch in a Next.js application.
 
+## Why use sessions and cookies over JWT for authentication?
+
+For this project, I'm following the document from the author of `lucia-auth`. Check out <https://lucia-auth.com/> for more information. There are some reasons for it
+
+- It's much easier to revoke a login. If we use JWT, we need a blacklist table, which we need to check on every requests. With sessions, you can just delete the session from the database.
+- It's simpler. You don't have have to deal with access Token, refresth token, csrf token and their expiration
+
 ## Features
 
 - **Custom Authentication System**
@@ -130,10 +137,8 @@ The template `.env.example` file can be used as a reference.
 
 ### Build and Run
 
-1. Build and start the application using Docker Compose:
+Build and start the application using Docker Compose:
 
-   ```bash
-   docker compose up --build
-   ```
-
-   This will build the image and start the `typescript-app` service.
+```bash
+docker compose up --build
+```
