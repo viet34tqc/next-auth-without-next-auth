@@ -4,7 +4,7 @@ A blog platform built with Next.js that implements custom authentication without
 
 ## Why use sessions and cookies over JWT for authentication?
 
-For this project, I'm following the document from the author of `lucia-auth`. Check out <https://lucia-auth.com/> for more information. There are some reasons for it
+For this project, I'm following the document from the author of `lucia-auth`. Check out <https://lucia-auth.com/> for more information. There are some reasons why I use session and cookie instead of JWT:
 
 - It's much easier to revoke a login. If we use JWT, we need a blacklist table, which we need to check on every requests. With sessions, you can just delete the session from the database.
 - It's simpler. You don't have have to deal with access Token, refresth token, csrf token and their expiration
