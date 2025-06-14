@@ -9,6 +9,16 @@ For this project, I'm following the document from the author of `lucia-auth`. Ch
 - It's much easier to revoke a login. If we use JWT, we need a blacklist table, which we need to check on every requests. With sessions, you can just delete the session from the database.
 - It's simpler. You don't have have to deal with access Token, refresth token, csrf token and their expiration
 
+## Flow
+
+Here is the flow for sign-in with session:
+
+<img src='images/sign-in.png>
+
+And here is the flow for sign-in with GitHub OAuth:
+
+<img src='images/sign-in-github.png>
+
 ## Features
 
 - **Custom Authentication System**
