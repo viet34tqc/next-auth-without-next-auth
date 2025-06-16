@@ -1,23 +1,23 @@
 # Next Auth Without Next Auth
 
-A blog platform built with Next.js that implements custom authentication without using the Next Auth library. This project demonstrates how to build a secure authentication system from scratch in a Next.js application.
+A simple blog platform built with Next.js that implements custom authentication without using the Next Auth library. This project demonstrates how to make a secure authentication system from scratch in a Next.js application.
 
 ## Why use sessions and cookies over JWT for authentication?
 
 For this project, I'm following the document from the author of `lucia-auth`. Check out <https://lucia-auth.com/> for more information. There are some reasons why I use session and cookie instead of JWT:
 
 - It's much easier to revoke a login. If we use JWT, we need a blacklist table, which we need to check on every requests. With sessions, you can just delete the session from the database.
-- It's simpler. You don't have have to deal with access Token, refresth token, csrf token and their expiration
+- It's simpler. You don't have to deal with access Token, refresh token, csrf token, and their expiration
 
 ## Flow
 
-Here is the flow for sign-in with session:
+Here is the flow for sign-in with a session:
 
-<img src='images/sign-in.png>
+![sign-in](https://github.com/user-attachments/assets/f372cff2-1ecd-4880-85e5-473a8f5ce966)
 
 And here is the flow for sign-in with GitHub OAuth:
 
-<img src='images/sign-in-github.png>
+![sign-in-jwt](https://github.com/user-attachments/assets/e34cb88d-b47b-4e02-a82f-dc08ec18fc77)
 
 ## Features
 
